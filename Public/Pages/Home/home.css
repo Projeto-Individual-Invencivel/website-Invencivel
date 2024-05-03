@@ -1,0 +1,296 @@
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    margin: 0px;
+    padding: 0px;
+    height: auto;
+
+    font-family: "Anonymous Pro", monospace;
+}
+
+.container-master{
+    height: auto;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.navBar{
+    height: 12vh;
+    width: 100%;
+    background-color: #33BFE7;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-around;
+
+    position: fixed;
+}
+
+.logo-website{
+    height: 100%;
+    width: 20%;
+    padding-left: 2%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.box-links-home{
+    height: 100%;
+    width: 40%;
+
+    display: flex;
+    align-items: center;
+}
+
+.box-links-home ul{
+    height: 80%;
+    flex-grow: 1;
+    list-style-type: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.box-links-pages{
+    height: 100%;
+    width: 30%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-links-pages ul{
+    height: 70%;
+    width: 70%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    list-style-type: none;
+}
+
+.box-links-home a, .box-links-pages a{
+    text-decoration: none;
+    color: black;
+}
+
+.box-links-home a:hover, .box-links-pages a:hover{
+    text-decoration: underline;
+    font-weight: bolder;
+}
+
+.container-inicio{
+    height: 100vh;
+    margin-top: 12vh;
+    background-color: #09090D;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.box-resumo-invencivel{
+    height: 80%;
+    width: 40%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.box-resumo-invencivel h1{
+    width: 80%;
+    margin-top: 10%;
+    color: #F7E953;
+    font-size: 3rem;
+}
+
+.box-resumo-invencivel p{
+    width: 80%;
+    margin-top: 1%;
+    text-align: justify;
+    font-size: 1.4rem;
+    color: white;
+}
+
+.box-img-invencivel{
+    height: 80%;
+    width: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-historia{
+    height: 175vh;
+    width: 100%;
+    padding-bottom: 2%;
+    background-color: #9C2348;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.container-historia h1{
+    color: #F7E953;
+}
+
+.container-historia p{
+    width: 90%;
+    margin: 0;
+    color: white;
+    font-size: 1.4rem;
+    text-align: justify;
+}
+
+.container-historia img{
+    border-radius: 8px;
+}
+
+.container-personagens{
+    height: 100vh;
+    background-image: url('../../Images/equipe-colisao.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-personagens{
+    height: 85%;
+    width: 90%;
+    background-color: rgb(0, 0, 0, 0.90);
+
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+.box-personagens h1{
+    width: 100%;
+    display: flex;
+    color: #F7E953;
+    align-items: center;
+    justify-content: center;
+}
+
+.carrossel{
+    flex-grow: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+}
+
+.slides{
+    height: 90%;
+    width: 90%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.slide{
+    height: 90%;
+    width: 30%;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.slide img{
+    border-radius: 8px;
+}
+
+.slide span{
+    width: 80%;
+    margin-top: 1%;
+    text-align: center;
+}
+
+.container-autor{
+    height: 100vh;
+    width: 100%;
+    padding-bottom: 3%;
+    background-color: #09090D;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.container-autor h1{
+    color: #F7E953;
+}
+
+.box-sobre-autor{
+    height: 80%;
+    width: 80%;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.box-img-autor{
+    height: 100%;
+    width: 40%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.box-img-autor img{
+    border-radius: 8px;
+    box-shadow: 4px 4px 15px 0px gray;
+}
+
+.box-texto-sobre{
+    width: 60%;
+    height: 100%;
+}
+
+.box-texto-sobre p{
+    width: 85%;
+    color: white;
+    font-size: 1.3em;
+    text-align: justify;
+}
+
+.footer{
+    height: 12vh;
+    width: 100%;
+    background-color: #33BFE7;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: black;
+    font-size: 1.2em;
+    font-weight: bolder;
+}
