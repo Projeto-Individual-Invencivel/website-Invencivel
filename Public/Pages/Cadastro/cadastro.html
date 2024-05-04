@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="login.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="cadastro.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
@@ -20,30 +20,33 @@
             <ul>
                 <li><a href="#">Fórum</a></li>
                 <li>|</li>
-                <li><a href="#" style="text-decoration: underline;">Login</a></li>
+                <li><a href="../Login/login.html">Login</a></li>
                 <li>|</li>
-                <li><a href="../Cadastro/cadastro.html">Cadastro</a></li>
+                <li><a href="#" style="text-decoration: underline;">Cadastro</a></li>
             </ul>
         </div>
     </div>
     <div class="container">
         <div class="container-formulario">
-            <div class="box-img-comunidade">
-                <img src="../../Images/comunidade-invencivel.jpg" height="100%" width="100%" alt="personagens da serie invencivel">
-            </div>
-            <div class="box-formulario">
-                <span class="title-form">Entre na Comunidade</span>
+            <div class="box-form">
+                <span class="title-form">Junte-se a comunidade!</span>
                 <div class="box-input">
+                    <label>Nome de usuário: <input type="text" placeholder="Informe seu nome de usuário"></label>
                     <label>Email: <input type="text" placeholder="example@example.com"></label>
+                    <label>Data de nascimento: <input type="date"></label>
                     <label>Senha: <input type="text" placeholder="ex: 123456789"></label>
-                    <p style="margin-top: 2%;">Ainda não possui uma conta? <a href="../Cadastro/cadastro.html">Clique aqui</a> e venha se juntar a nossa comunidade!</p>
+                    <label>Confirmar senha:<input type="text" placeholder="ex: 123456789"></label>
+                    <span>Já possui uma conta na plataforma? <a href="../Login/login.html">Clique aqui</a> e entre em nossa comunidade!</span>
                 </div>
                 <button>ENTRAR</button>
+            </div>
+            <div class="box-img-guerra">
+                <img src="../../Images/guerra-galatica.jpeg" height="100%" width="100%" alt="imperio viltrumita conta colisao">
             </div>
         </div>
     </div>
     <div class="footer">
-        <p>©BrugoAmorim 2024 Todos os direitos reservados.</p>
+        <p>&copy;BrugoAmorim 2024 Todos os direitos reservados.</p>
     </div>
 </body>
 </html>
