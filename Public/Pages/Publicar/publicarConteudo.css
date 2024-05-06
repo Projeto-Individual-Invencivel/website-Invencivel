@@ -1,0 +1,274 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+    font-family: "Anonymous Pro", monospace;
+}
+
+.navBar{
+    height: 12vh;
+    width: 100%;
+    background-color: #F7E953;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.box-img{
+    height: 100%;
+    width: 20%;
+    padding-left: 2%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.box-img a{
+    height: 100%; 
+    
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+}
+
+.box-links{
+    height: 100%;
+    width: 25%;
+
+    display: flex;
+    align-items: center;
+}
+
+.box-links ul{
+    height: 80%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    list-style-type: none;
+}
+
+.box-links ul li:not(:first-child){
+    margin-left: 2%;
+}
+
+.box-links a{
+    text-decoration: none;
+    color: black;
+}
+
+.box-links a:hover{
+    text-decoration: underline;
+    font-weight: bolder;
+}
+
+.container{
+    height: 110vh;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container-aviso{
+    height: 13%;
+    width: 75%;
+
+    display: flex;
+    align-items: center;
+}
+
+.box-mensagem{
+    height: 80%;
+    width: 100%;
+    
+    background-color: rgb(247, 233, 83, 0.6);
+    border: 2px solid #F7E953;
+    border-radius: 6px;
+}
+
+.box-mensagem span{
+    height: 100%;
+
+    font-size: 1.1em;
+    color: #434343;
+    
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.container-formulario-post{
+    height: 65%;
+    width: 85%;
+    margin-top: 2%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.box-form{
+    height: 90%;
+    width: 100%;
+
+    border: 2px solid #d9d9d9;
+    border-radius: 8px;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.box-input{
+    height: 70%;
+    width: 95%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.box-input{
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #434343;
+}
+
+.input-titulo{
+    height: 28%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.input-titulo input{
+    height: 60%;
+
+    padding-left: 2%;
+    font-size: 0.8em;
+    border-radius: 4px;
+
+    border: none;
+    outline: none;
+    color: #434343;
+    background-color: #F1F1F1;
+}
+
+.input-corpo{
+    height: 65%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.input-corpo textarea{
+    height: 77%;
+
+    padding-top: 1.5%;
+    padding-left: 2%;
+    border-radius: 4px;
+    font-size: 0.8em;
+
+    border: none;
+    outline: none;
+    color: #434343;
+    background-color: #F1F1F1;
+}
+
+.box-aviso{
+    height: 10%;
+    width: 95%;
+    color: #434343;
+}
+
+.box-buttons{
+    height: 15%;
+    width: 95%;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.btn-cancel{
+    height: 65%;
+    width: 15%;
+    margin-right: 2%;
+
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #434343;
+    font-size: 1.2em;
+    font-weight: bolder;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.btn-cancel:hover{
+    transition: 0.2s;
+    background-color: #d9d9d9;
+}
+
+.btn-cancel:active{
+    transition: 0.2s;
+    background-color: #cacaca;
+}
+
+.btn-post{
+    height: 65%;
+    width: 15%;
+
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 4px;
+
+    color: white;
+    font-size: 1.2em;
+    font-weight: bolder;
+    background-color: #9C2348;
+}
+
+.btn-post:hover{
+    transition: 0.2s;
+    background-color: #881f3e;
+}
+
+.btn-post:active{
+    transition: 0.2s;
+    background-color: #751b36;
+}
+
+.footer{
+    height: 12vh;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 1.2em;
+    font-weight: bolder;
+    background-color: black;
+}
