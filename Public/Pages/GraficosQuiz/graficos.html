@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gráficos de resposta</title>
+    <link rel="stylesheet" href="graficos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="../../Images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="navBar">
+        <div class="box-img">
+            <a href="../Home/home.html">
+                <img src="../../Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'">
+            </a>
+        </div>
+        <div class="box-links">
+            <ul>
+                <li><a href="../Forum/forum.html">Fórum</a></li>
+                <li>|</li>
+                <li><a href="../Quizzes/quizzes.html">Quiz</a></li>
+                <li>|</li>
+                <li><a href="../Home/home.html">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="container-pontuacao">
+            <h1>Sua Pontuação:<span>10/10</span></h1>
+            <button>TENTAR DE NOVO</button>
+        </div>
+        <div class="container-graficos-resposta">
+            <div class="box-title-graficos">
+                <h2>Porcentagem(%) de resposta por pergunta que os usuários deram:</h2>
+            </div>
+            <div class="box-graficos" id="teste">
+                <!-- Estrutura dos graficos
+                 <div class="bloco">
+                    <canvas id="GraficoPergunta1"></canvas>
+                 </div>
+                -->
+            </div>
+        </div>
+        <div class="container-grafico-historico">
+            <h2>Histórico de tentativas</h2>
+            <canvas id="GraficoBarra"></canvas>
+        </div>
+    </div>
+    <div class="footer">
+        <span>©BrunoGomes 2024 Todos os direitos reservados.</span>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+    window.onload = () => {
+        for (let i = 1; i <= 2; i++) {
+            
+            const teste = document.getElementById('teste');
+            const div = document.createElement('div');
+
+            div.classList.add('bloco');
+            div.innerHTML = `<canvas id="GraficoPergunta${i}"></canvas>`;
+            teste.appendChild(div);
+
+            const ctx = document.getElementById(`GraficoPergunta${i}`);
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Mark', 'Deby', 'Nolan', 'Cecil'],
+                    datasets: [{
+                        label: 'Porcentagem de',
+                        data: [12, 19, 3, 5],
+                        backgroundColor: [
+                            '#9C2348',
+                            '#33BFE7',
+                            '#F7E953',
+                            '#09090D'
+                        ]
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Quem é o protagonista da série "Invencível"?',
+                            font: {
+                                size: 20,
+                                weight: '700'
+                            }
+                        },
+                        legend: {
+                            position: 'bottom'
+                        },
+                        subtitle: {
+                            display: true,
+                            text: `Resposta: Mark | Sua Resposta: Deby`,
+                            padding: {
+                                bottom: 10
+                            },
+                            font: {
+                                size: 15
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    };
+
+    const graHistorico = document.getElementById('GraficoBarra');
+    graHistorico.width = '100%'
+
+    new Chart(graHistorico, {
+        type: 'bar',
+        data:{
+            labels: ['1° Tentativa', '2° Tentativa', '3° Tentativa', '4° Tentativa'],
+            datasets: [{
+                label: 'Quantidade de pontos',
+                data: [4, 3, 7, 9],
+                backgroundColor: [
+                    '#9C2348'
+                ]
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    min: 0,
+                    max: 10
+                }
+            }
+        }
+    })
+</script>
+</html>
