@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 </head>
 <body>
     <div class="navBar">
@@ -39,7 +40,7 @@
                     <label>Senha: <input type="password" id="inp_senhaUser" placeholder="ex: 123456789"></label>
                     <p style="margin-top: 2%;">Ainda não possui uma conta? <a href="../Cadastro/cadastro.html">Clique aqui</a> e venha se juntar a nossa comunidade!</p>
                 </div>
-                <button>ENTRAR</button>
+                <button onclick="Login()">ENTRAR</button>
             </div>
         </div>
     </div>
@@ -55,23 +56,59 @@
         const email = inp_emailUser.value;
         const senha = inp_senhaUser.value;
 
-        let url = "/usuarios/login";
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                emailUser: email,
-                senhaUser: senha
+        if(email.trim() == ""){
+            Swal.fire({
+                title: "Ocorreu um erro ao tentar realizar o login",
+                text: "Campo email vazio",
+                icon: "error"
             })
-        }).then((res) => {
-
-            res.then((data) => {
-
-                console.log(data)
+        } else if(senha.trim() == ""){
+            Swal.fire({
+                title: "Ocorreu um erro ao tentar realizar o login",
+                text: "Campo senha vazio",
+                icon: "error"
             })
-        })
+        } else{
+            
+            let url = "/usuarios/login";
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    emailUser: email,
+                    senhaUser: senha
+                })
+            }).then((res) => {
+
+                if(res.ok){
+
+                    res.json().then((data) => {
+
+                        sessionStorage.ID_USUARIO = data.id_usuario;
+                        sessionStorage.NOME = data.nome;
+
+                        Swal.fire({
+                            title: "Login feito com sucesso!",
+                            text: "Você será redirecionado para o Fórum",
+                            icon: "success"
+                        })
+                        setTimeout(() => {                        
+                            window.location.href = "../Forum/forum.html";
+                        }, 3000)
+                    })
+                } else{
+
+                    res.text().then((err) => {
+                        Swal.fire({
+                            title: "Ocorreu um erro ao tentar realizar o login",
+                            text: err,
+                            icon: "error"
+                        })
+                    })
+                }
+            })
+        }
     }
-
 </script>

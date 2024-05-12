@@ -102,7 +102,7 @@
     cursor: pointer;
     border-radius: 4px;
 
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
 

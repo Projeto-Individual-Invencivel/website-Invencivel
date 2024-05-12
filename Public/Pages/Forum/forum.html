@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="../../Images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="navBar">
@@ -21,15 +21,17 @@
             <ul>
                 <li><a href="#" style="text-decoration: underline;">Fórum</a></li>
                 <li>|</li>
-                <li><a href="../Login/login.html">Login</a></li>
+                <li id="link1NavBar"><a href="../Login/login.html">Login</a></li>
                 <li>|</li>
-                <li><a href="../Cadastro/cadastro.html">Cadastro</a></li>
+                <li id="link2NavBar"><a href="../Cadastro/cadastro.html">Cadastro</a></li>
             </ul>
         </div>
     </div>
     <div class="container">
         <div class="box-nome-usuario">
-            <p id="p_nmUsuario">Bem vindo, nome_usuario</p>
+            <p id="p_nmUsuario">
+                <!-- mensagem de boas vindas -->
+            </p>
             <div class="box-button-topico">
                 <h1>Discussões do Fórum:</h1>
                 <a href="../Publicar/publicarConteudo.html" class="btn-criar-topico" id="a_criarTopico">Criar tópico</a>
@@ -96,3 +98,20 @@
     </div>
 </body>
 </html>
+<script>
+    window.onload = () => {
+
+        if(sessionStorage.ID_USUARIO != undefined){
+
+            link1NavBar.innerHTML = `
+                <a href="../Quizzes/quizzes.html">Quiz</a>
+            `;
+            link2NavBar.innerHTML = `
+                <a href="../../index.html">Sair</a>
+            `;
+        
+            a_criarTopico.style.display = "flex";
+            p_nmUsuario.innerHTML = `Bem vindo, ${sessionStorage.NOME}`;
+        }
+    }
+</script>
