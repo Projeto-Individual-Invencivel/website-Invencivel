@@ -164,7 +164,7 @@ body{
 
 .container-personagens{
     height: 100vh;
-    background-image: url('../../Images/equipe-colisao.png');
+    background-image: url('./Assets/Images/equipe-colisao.png');
     background-repeat: no-repeat;
     background-size: 100%;
 

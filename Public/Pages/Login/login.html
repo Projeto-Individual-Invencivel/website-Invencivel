@@ -8,13 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="../../Images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="navBar">
         <div class="box-img">
-            <a href="../Home/home.html">
-                <img src="../../Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'">
+            <a href="../../index.html">
+                <img src="../../Assets/Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'">
             </a>
         </div>
         <div class="box-links">
@@ -30,13 +30,13 @@
     <div class="container">
         <div class="container-formulario">
             <div class="box-img-comunidade">
-                <img src="../../Images/comunidade-invencivel.jpg" height="100%" width="100%" alt="personagens da serie invencivel">
+                <img src="../../Assets/Images/comunidade-invencivel.jpg" height="100%" width="100%" alt="personagens da serie invencivel">
             </div>
             <div class="box-formulario">
                 <span class="title-form">Entre na Comunidade</span>
                 <div class="box-input">
-                    <label>Email: <input type="text" placeholder="example@example.com"></label>
-                    <label>Senha: <input type="text" placeholder="ex: 123456789"></label>
+                    <label>Email: <input type="text" id="inp_emailUser" placeholder="example@example.com"></label>
+                    <label>Senha: <input type="password" id="inp_senhaUser" placeholder="ex: 123456789"></label>
                     <p style="margin-top: 2%;">Ainda não possui uma conta? <a href="../Cadastro/cadastro.html">Clique aqui</a> e venha se juntar a nossa comunidade!</p>
                 </div>
                 <button>ENTRAR</button>
@@ -48,3 +48,30 @@
     </div>
 </body>
 </html>
+<script>
+
+    const Login = () => {
+
+        const email = inp_emailUser.value;
+        const senha = inp_senhaUser.value;
+
+        let url = "/usuarios/login";
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                emailUser: email,
+                senhaUser: senha
+            })
+        }).then((res) => {
+
+            res.then((data) => {
+
+                console.log(data)
+            })
+        })
+    }
+
+</script>
