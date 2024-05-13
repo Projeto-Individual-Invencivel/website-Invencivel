@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 </head>
 <body>
     <div class="navBar">
@@ -32,14 +33,14 @@
             <div class="box-form">
                 <span class="title-form">Junte-se a comunidade!</span>
                 <div class="box-input">
-                    <label>Nome de usuário: <input type="text" placeholder="Informe seu nome de usuário"></label>
-                    <label>Email: <input type="text" placeholder="example@example.com"></label>
-                    <label>Data de nascimento: <input type="date"></label>
-                    <label>Senha: <input type="text" placeholder="ex: 123456789"></label>
-                    <label>Confirmar senha:<input type="text" placeholder="ex: 123456789"></label>
+                    <label>Nome de usuário: <input type="text" id="inp_nomeUser" placeholder="Informe seu nome de usuário"></label>
+                    <label>Email: <input type="text" id="inp_emailUser" placeholder="example@example.com"></label>
+                    <label>Data de nascimento: <input type="date" id="inp_dtNasc"></label>
+                    <label>Senha: <input type="text" id="inp_senhaUser" placeholder="ex: 123456789"></label>
+                    <label>Confirmar senha:<input type="text" id="inp_confirmarSenha" placeholder="ex: 123456789"></label>
                     <span>Já possui uma conta na plataforma? <a href="../Login/login.html">Clique aqui</a> e entre em nossa comunidade!</span>
                 </div>
-                <button>ENTRAR</button>
+                <button onclick="Cadastrar()">ENTRAR</button>
             </div>
             <div class="box-img-guerra">
                 <img src="../../Assets/Images/guerra-galatica.jpeg" height="100%" width="100%" alt="imperio viltrumita conta colisao">
@@ -51,3 +52,67 @@
     </div>
 </body>
 </html>
+<script>
+    const Cadastrar = () => {
+
+        const nome = inp_nomeUser.value;
+        const email = inp_emailUser.value;
+        const dtNasc = inp_dtNasc.value == "" ? "" : new Date(inp_dtNasc.value);
+        const senhaUser = inp_senhaUser.value;
+        const confirmarSenha = inp_confirmarSenha.value;
+
+        if(nome == "" || email == "" || dtNasc == "" || senhaUser == "" || confirmarSenha == ""){
+            Swal.fire({
+                text: 'Preencha todos os campos para continuar',
+                icon: 'error'
+            })
+        } else if(senhaUser != confirmarSenha){
+            Swal.fire({
+                text: 'As senhas não coincidem',
+                icon: 'error'
+            })
+        } else if(dtNasc.getFullYear() >= 2020){
+            Swal.fire({
+                text: 'Data de nascimento inválida',
+                icon: 'error'
+            })
+        } else{
+
+            let url = "/usuarios/cadastrar"
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nomeUser: nome,
+                    nascUser: dtNasc,
+                    emailUser: email,
+                    senhaUser: senhaUser
+                })
+            }).then((resposta) => {
+
+                if(resposta.ok){
+                    resposta.json().then((data) => {
+                        Swal.fire({
+                            title: 'Conta criada com sucesso!',
+                            text: 'Você será redirecionado para o login',
+                            icon: 'success'
+                        })
+                    })
+                    setTimeout(() => {
+                        window.location.href = "../Login/login.html";
+                    }, 3000);
+                } else{
+                    resposta.text().then((err) => {
+                        Swal.fire({
+                            title: 'Ops... Algo deu errado!',
+                            text: err,
+                            icon: 'error'
+                        })
+                    })
+                }
+            })
+        }
+    }
+</script>

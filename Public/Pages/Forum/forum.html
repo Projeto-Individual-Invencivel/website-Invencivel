@@ -38,9 +38,10 @@
             </div>
         </div>
         <div class="container-discussoes">
-            <div class="box-topicos">
-                <div class="box-topico">
-                    <div class="box-numerador">
+            <div class="box-topicos" id="div_topicosForum">
+                <!-- Estrutura dos tópicos 
+                    <div class="box-topico">
+                    <div class="box-numerador" id="div_topicosForum">
                         <span class="numerador" id="span_numPost">1.</span>
                         <div class="topico">
                             <span class="title-topico" id="span_tituloPost">Teorias sobre Invencível: Próximos Episódios', 'Quais são as suas teorias para os próximos episódios de Invencível? Compartilhe suas especulações e expectativas.</span>
@@ -55,41 +56,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="box-topico">
-                    <div class="box-numerador">
-                        <span class="numerador" id="span_numPost">2.</span>
-                        <div class="topico">
-                            <span class="title-topico" id="span_tituloPost">Cenas Épicas em Invencível</span>
-                            <div class="box-informacoes-topico">
-                                <span id="span_likes">Curtidas: 12</span>
-                                <span>|</span>
-                                <span id="span_comments">Comentários: 10</span>
-                                <span>|</span>
-                                <span id="span_autor">nome_autor</span>
-                                <span>|</span>
-                                <span id="span_dtPost">Postagem: 03/05/2024</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="box-topico">
-                    <div class="box-numerador">
-                        <span class="numerador" id="span_numPost">3.</span>
-                        <div class="topico">
-                            <span class="title-topico" id="span_tituloPost">Conversa sobre Invencível: Quadrinhos vs. Série</span>
-                            <div class="box-informacoes-topico">
-                                <span id="span_likes">Curtidas: 12</span>
-                                <span>|</span>
-                                <span id="span_comments">Comentários: 10</span>
-                                <span>|</span>
-                                <span id="span_autor">nome_autor</span>
-                                <span>|</span>
-                                <span id="span_dtPost">Postagem: 03/05/2024</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -113,5 +80,51 @@
             a_criarTopico.style.display = "flex";
             p_nmUsuario.innerHTML = `Bem vindo, ${sessionStorage.NOME}`;
         }
+    
+        let url = "/forum/listar";
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then((res) => {
+
+            if(res.ok){
+                res.json().then((data) => {
+                    
+                    let texto = "";
+                    for(let i = 0; i < data.length; i++){
+
+                        let model = data[i];
+                        let newData = new Date(model.dtPostagem);
+                        let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}` 
+
+                        let estrutura = `
+                            <div class="box-topico">
+                                <div class="box-numerador">
+                                    <span class="numerador">${i + 1}.</span>
+                                    <div class="topico">
+                                        <span class="title-topico">${model.titulo}</span>
+                                        <div class="box-informacoes-topico">
+                                            <span>Curtidas: ${model.curtidas}</span>
+                                            <span>|</span>
+                                            <span>Comentários: ${model.comentarios}</span>
+                                            <span>|</span>
+                                            <span>${model.Autor}</span>
+                                            <span>|</span>
+                                            <span>Postagem: ${formData}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        
+                        texto += estrutura
+                    }
+                    div_topicosForum.innerHTML = texto;
+                })
+            }
+        })
     }
+
 </script>

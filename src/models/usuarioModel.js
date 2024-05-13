@@ -6,6 +6,22 @@ function login(email, senha){
     return database.executar(script)
 }
 
+function cadastrar(nome, nasc, email, senha){
+
+    const formatarData = `${nasc.getFullYear()}-${nasc.getMonth() + 1}-${nasc.getDate() + 1}`;
+
+    var script = `INSERT INTO tb_usuario values(null, '${nome}', '${formatarData}', '${email}', '${senha}')`;
+    return database.executar(script)
+}
+
+async function buscarEmail(email){
+
+    var script = `SELECT * FROM tb_usuario WHERE email = '${email}'`
+    return database.executar(script)
+}
+
 module.exports = {
-    login
+    login,
+    cadastrar,
+    buscarEmail
 };
