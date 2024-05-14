@@ -7,4 +7,8 @@ router.get("/listar", (req, res) => {
     usuarioController.Forum(req, res);
 })
 
+router.post('/publicar/:idUsuario', (req, res) => {
+    usuarioController.Publicar(req, res);
+})
+
 module.exports = router;

@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 </head>
 <body>
     <div class="navBar">
@@ -39,11 +40,11 @@
                 <div class="box-input">
                     <label class="input-titulo">
                         Titulo da discussão *
-                        <input type="text" placeholder="ex: Existe alguem mais forte que aquele personagem?">
+                        <input type="text" id="inp_title" placeholder="ex: Existe alguem mais forte que aquele personagem?">
                     </label>
                     <label class="input-corpo">
                         Corpo da publicação *
-                        <textarea id="" placeholder="Escreva aqui"></textarea>
+                        <textarea id="inp_body" placeholder="Escreva aqui"></textarea>
                     </label>
                 </div>
                 <div class="box-aviso">
@@ -51,7 +52,7 @@
                 </div>
                 <div class="box-buttons">
                     <a href="../Forum/forum.html" class="btn-cancel">Cancelar</a>
-                    <button class="btn-post">Publicar</button>
+                    <button class="btn-post" onclick="Publicar()">Publicar</button>
                 </div>
             </div>
         </div>
@@ -61,3 +62,59 @@
     </div>
 </body>
 </html>
+<script>
+    const Publicar = () => {
+
+        var title = inp_title.value;
+        var body = inp_body.value;
+
+        if(sessionStorage.ID_USUARIO == 0){
+            Swal.fire({
+                title: 'Erro ao realizar a postagem!',
+                text: 'Você não tem permissão para fazer publicações',
+                icon: 'error'
+            })
+        } else if(title == "" || body == ""){
+            Swal.fire({
+                title: 'Erro ao realizar a postagem!',
+                text: 'Preencha todos os campos obrigatórios',
+                icon: 'error'
+            })
+        } else{
+            
+            let url = "/forum/publicar/" + sessionStorage.ID_USUARIO;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    tituloUser: title,
+                    descUser: body
+                })
+            }).then((res) => {
+
+                if(res.ok){
+                    res.json().then((data) => {
+                        Swal.fire({
+                            title: 'Postagem executada com sucesso!',
+                            text: 'Você será redirecionado para o seu post',
+                            icon: 'success'
+                        });
+                        setTimeout(() => {
+                            window.location.href = '../Discussao/detalhesDiscussao.html';
+                        }, 3000)
+                    })
+                } else{
+                    res.text().then((err) => {
+                        Swal.fire({
+                            title: 'Ocorreu um erro ao realizar a postagem!',
+                            text: err,
+                            icon: 'error'
+                        })
+                    })
+                }
+            })
+        }        
+    }
+</script>

@@ -21,13 +21,27 @@ function listarForuns(){
             ) as comentarios
             from tb_discussao as discussao
             join tb_usuario as usuario
-                on usuario.id_usuario = discussao.id_discussao
+                on usuario.id_usuario = discussao.fkDiscussaoUsuario
             group by discussao.id_discussao, discussao.fkDiscussaoUsuario, 
                 discussao.titulo, discussao.descricao, discussao.dtPostagem;
     `;
     return database.executar(script);
 }
 
+async function listarPostsUser(idUser){
+
+    const script = `select * from tb_discussao where fkDiscussaoUsuario = ${idUser};`
+    return database.executar(script);
+}
+
+function postarConteudo(idAutor, idPost, titulo, descricao, dtPost){
+
+    const script = `INSERT INTO tb_discussao (id_discussao, fkDiscussaoUsuario, titulo, descricao, dtPostagem) VALUES (${idPost}, ${idAutor}, '${titulo}', '${descricao}', '${dtPost}');`;
+    return database.executar(script);
+}
+
 module.exports = {
-    listarForuns
+    listarForuns,
+    listarPostsUser,
+    postarConteudo
 }
