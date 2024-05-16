@@ -1,0 +1,4 @@
+
+const limpar = () => {
+    sessionStorage.clear();
+}

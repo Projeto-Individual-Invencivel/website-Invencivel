@@ -191,6 +191,13 @@
 .title-topico{
     font-size: 1.4em;
     font-weight: bolder;
+
+    cursor: pointer;
+}
+
+.title-topico:hover{
+    text-decoration: underline;
+    color: blue;
 }
 
 .box-informacoes-topico{

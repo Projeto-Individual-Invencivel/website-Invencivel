@@ -9,21 +9,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="../../Js/sessionStorage.js"></script>
 </head>
 <body>
     <div class="navBar">
         <div class="box-img">
             <a href="../../index.html">
-                <img src="../../Assets/Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'">
+                <img src="../../Assets/Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'" onclick="limpar()">
             </a>
         </div>
         <div class="box-links">
             <ul>
                 <li><a href="../Forum/forum.html">Fórum</a></li>
                 <li>|</li>
-                <li><a href="../Quizzes/quizzes.html">Quiz</a></li>
+                <li id="link1NavBar"><a href="../Login/login.html">Login</a></li>
                 <li>|</li>
-                <li><a href="../../index.html">Sair</a></li>
+                <li id="link2NavBar"><a href="../Cadastro/cadastro.html">Cadastro</a></li>
             </ul>
         </div>
     </div>
@@ -51,10 +52,11 @@
                 </div>
             </div>
         </div>
-        <div class="container-resposta">
-            <textarea id="" placeholder="Escreva sua resposta aqui"></textarea>
+        <div class="container-resposta" id="div_responderTopico">
+            <textarea id="txt_resposta" placeholder="Escreva sua resposta aqui"></textarea>
             <div>
-                <button class="btn-responder">Responder</button>
+                <button class="btn-responder" id="btn_resposta">Responder</button>
+                <button class="btn-cancelar" id="btn_cancelar">Cancelar</button>
             </div>
         </div>
         <div class="container-comentario">
@@ -115,3 +117,27 @@
     </div>
 </body>
 </html>
+<script>
+    window.onload = () => {
+
+        if(sessionStorage.ID_USUARIO != undefined){
+            link1NavBar.innerHTML = `
+                <a href="../Quizzes/quizzes.html">Quiz</a>
+            `;
+            link2NavBar.innerHTML = `
+                <a href="../../index.html" onclick="limpar()">Sair</a>
+            `;
+            div_responderTopico.style.display = "flex";
+        }
+    }
+    btn_resposta.onclick = () => {
+        btn_resposta.innerHTML = "Publicar";
+        btn_cancelar.style.display = 'flex';
+        txt_resposta.style.display = "flex";
+    } 
+    btn_cancelar.onclick = () => {
+        btn_resposta.innerHTML = "Responder";
+        txt_resposta.style.display = "none";
+        btn_cancelar.style.display = 'none';
+    }
+</script>

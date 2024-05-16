@@ -9,12 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="../../Js/sessionStorage.js"></script>
 </head>
 <body>
     <div class="navBar">
         <div class="box-img">
             <a href="../../index.html">
-                <img src="../../Assets/Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'">
+                <img src="../../Assets/Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'" onclick="limpar()">
             </a>
         </div>
         <div class="box-links">
@@ -23,7 +24,7 @@
                 <li>|</li>
                 <li><a href="../Quizzes/quizzes.html">Quiz</a></li>
                 <li>|</li>
-                <li><a href="../../index.html">Sair</a></li>
+                <li><a href="../../index.html" onclick="limpar()">Sair</a></li>
             </ul>
         </div>
     </div>

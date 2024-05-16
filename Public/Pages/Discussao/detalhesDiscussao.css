@@ -180,7 +180,7 @@
     height: auto;
     margin-top: 1%;
 
-    display: flex;
+    display: none;
     justify-content: space-evenly;
     align-items: center;
     flex-direction: column;
@@ -196,6 +196,7 @@
     padding-top: 1%;
     padding-left: 1%;
 
+    display: none;
     border: none;
     border-radius: 4px;
     outline: none;
@@ -228,14 +229,38 @@
     background-color: #9C2348;
 }
 
-.container-resposta div button:hover{
+.btn-responder:hover{
     transition: 0.2s;
     background-color: #881f3e;
 }
 
-.container-resposta div button:active{
+.btn-responder:active{
     transition: 0.2s;
     background-color: #751b36;
+}
+
+.btn-cancelar{
+    margin-left: 1%;
+    width: 12%;
+
+    border: none;
+    outline: none;
+    cursor: pointer;
+    border-radius: 4px;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    color: #434343;
+    font-size: 1.1em;
+    font-weight: bold;
+    background-color: transparent;
+}
+
+.btn-cancelar:hover{
+    transition: 0.2s;
+    background-color: #D9D9D9;
 }
 
 .container-comentario{
