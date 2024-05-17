@@ -32,7 +32,8 @@
     <div class="container">
         <div class="box-formulario-quiz">
             <div class="box-titulo-quiz">
-                <h1>Quiz: Personagens da Saga</h1>
+                <h1 id="h1_titulo"></h1>
+                <span class="box-desc-quiz" id="span_descricao"></span>
             </div>
             <div class="box-perguntas-quiz">
                 <div class="pergunta-quiz">
@@ -75,3 +76,29 @@
     </div>
 </body>
 </html>
+<script>
+
+    window.onload = () => {
+
+        h1_titulo.innerHTML = `Quiz: ${sessionStorage.TITULO}`;
+        span_descricao.innerHTML = `${sessionStorage.DESCRICAO}`;
+
+        let url = `/quiz/perguntas/${sessionStorage.ID_QUIZ}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": 'application'
+            }
+        }).then((res) => {
+            if(res.ok){
+                res.json().then((data) => {
+                    console.log(data);
+                })
+            } else{
+                res.text().then((err) => {
+                    console.log(err);
+                })
+            }
+        })
+    }
+</script>

@@ -1,0 +1,14 @@
+var express = require("express");
+var router = express.Router();
+
+const quizController = require('../controllers/quizController');
+
+router.get('/quizzes/:idUsuario', (req, res) => {
+    quizController.buscarQuizzes(req, res);
+})
+
+router.get('/perguntas/:idQuiz', (req, res) => {
+    quizController.buscarPerguntas(req, res);
+})
+
+module.exports = router

@@ -93,16 +93,22 @@
 
 .box-titulo-quiz{
     height: auto;
-    min-height: 10vh;
+    min-height: 15vh;
     width: 80%;
     margin: 1%;
 
     display: flex;
     text-align: center;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
 
     color: #F7E953;
+}
+
+.box-desc-quiz{
+    margin: 1%;
+    color: white;
 }
 
 .box-perguntas-quiz{

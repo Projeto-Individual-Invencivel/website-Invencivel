@@ -30,24 +30,26 @@
     </div>
     <div class="container">
         <div class="box-nome-usuario">
-            <p id="p_nmUsuario">Bem vindo, nome_usuario</p>
+            <p id="p_nmUsuario"></p>
             <h1>Quizzes:</h1>
         </div>
         <div class="container-discussoes">
-            <div class="box-topicos">
-                <div class="box-topico">
-                    <div class="box-numerador">
-                        <span class="numerador" id="span_numQuiz">1.</span>
-                        <div class="topico">
-                            <span class="title-topico" id="span_tituloPost">Personagens da saga</span>
-                            <div class="box-informacoes-topico">
-                                <span id="span_qtdTentativas">Quantidade de tentativas: 12</span>
-                                <span>|</span>
-                                <span id="span_dtPostagem">Postagem: 10/03/2024</span>
+            <div class="box-topicos" id="div_quizzes">
+                <!-- Estrutura do Quiz 
+                    <div class="box-topico">
+                        <div class="box-numerador">
+                            <span class="numerador" id="span_numQuiz">1.</span>
+                            <div class="topico">
+                                <span class="title-topico" id="span_tituloPost">Personagens da saga</span>
+                                <div class="box-informacoes-topico">
+                                    <span id="span_qtdTentativas">Quantidade de tentativas: 12</span>
+                                    <span>|</span>
+                                    <span id="span_dtPostagem">Postagem: 10/03/2024</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div> 
+                -->
             </div>
         </div>
     </div>
@@ -56,3 +58,59 @@
     </div>
 </body>
 </html>
+<script>
+
+    window.onload = () => {
+
+        p_nmUsuario.innerHTML = `Bem vindo, ${sessionStorage.NOME}`;
+
+        let url = `/quiz/quizzes/${sessionStorage.ID_USUARIO}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then((res) => {
+
+            if(res.ok){
+                res.json().then((data) => {
+
+                    let texto = '';
+                    for(let i = 0; i < data.length; i++){
+
+                        let newData = new Date(data[i].dtCriado);
+                        let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}` 
+
+                        texto += `
+                            <div class="box-topico">
+                                <div class="box-numerador">
+                                    <span class="numerador">${i + 1}.</span>
+                                    <div class="topico">
+                                        <a href="../RealizarQuiz/quiz.html" class="title-topico" onclick="fazerQuiz(${data[i].id_quiz}, '${data[i].titulo}', '${data[i].descricao}')">${data[i].titulo}</a>
+                                        <div class="box-informacoes-topico">
+                                            <span id="span_qtdTentativas">Quantidade de tentativas: ${data[i].tentativas}</span>
+                                            <span>|</span>
+                                            <span id="span_dtPostagem">Postagem: ${formData}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    div_quizzes.innerHTML = texto;
+                })
+            } else{
+                res.text().then((err) => {
+                    console.error(err);
+                })
+            }
+        })
+    }
+
+    function fazerQuiz(idQuiz, titulo, desc){
+
+        sessionStorage.ID_QUIZ = idQuiz;
+        sessionStorage.TITULO = titulo;
+        sessionStorage.DESCRICAO = desc;
+    }
+</script>
