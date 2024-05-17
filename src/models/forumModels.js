@@ -40,8 +40,15 @@ function postarConteudo(idAutor, idPost, titulo, descricao, dtPost){
     return database.executar(script);
 }
 
+function buscarPostId(idUser, idDiscussao){
+
+    const script = `SELECT discussao.*, (select tb_usuario.nome from tb_usuario where id_usuario = ${idUser}) as autor, (select count(tb_curtida_discussao.id_curtida_discussao) from tb_curtida_discussao WHERE tb_curtida_discussao.fkDiscussao = discussao.id_discussao and discussao.fkDiscussaoUsuario = tb_curtida_discussao.fkAutorDiscussao) as curtidas FROM tb_discussao as discussao WHERE id_discussao = ${idDiscussao} AND fkDiscussaoUsuario = ${idUser};`;
+    return database.executar(script);
+}
+
 module.exports = {
     listarForuns,
     listarPostsUser,
-    postarConteudo
+    postarConteudo,
+    buscarPostId
 }

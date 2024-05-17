@@ -1,4 +1,6 @@
 const forumModels = require('../models/forumModels');
+const usuarioModels = require('../models/usuarioModel');
+const comentariosModels = require('../models/comentarioModels');
 
 function Forum(req, res){
 
@@ -32,7 +34,30 @@ async function Publicar(req, res){
     }
 }
 
+async function detalhesDiscussao(req, res){
+
+    const idDiscussao = req.params.idDiscussao;
+    const idUsuario = req.params.idUsuario;
+
+    const usuario = await usuarioModels.buscarUsuarioId(idUsuario).then((data) => {
+        return data.length == 0 ? true : false;
+    })
+
+    if(idDiscussao == undefined){
+        res.status(400).send("Está discussão não foi encontrada")
+    } else if(usuario){
+        res.status(400).send("O autor da postagem não existe")
+    } else{
+        const comentarios = await comentariosModels.comentariosPost(idUsuario, idDiscussao);
+        await forumModels.buscarPostId(idUsuario, idDiscussao).then((data) => {
+            data[0].comentarios = comentarios;
+            res.status(203).json(data[0]);
+        })
+    }
+}
+
 module.exports = {
     Forum,
-    Publicar
+    Publicar,
+    detalhesDiscussao
 }

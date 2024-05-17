@@ -20,8 +20,15 @@ async function buscarEmail(email){
     return database.executar(script)
 }
 
+function buscarUsuarioId(idUser){
+
+    var script = `SELECT * FROM tb_usuario WHERE id_usuario = ${idUser}`;
+    return database.executar(script);
+}
+
 module.exports = {
     login,
     cadastrar,
-    buscarEmail
+    buscarEmail,
+    buscarUsuarioId
 };
