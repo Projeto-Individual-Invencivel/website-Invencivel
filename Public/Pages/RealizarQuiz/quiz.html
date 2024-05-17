@@ -35,8 +35,8 @@
                 <h1 id="h1_titulo"></h1>
                 <span class="box-desc-quiz" id="span_descricao"></span>
             </div>
-            <div class="box-perguntas-quiz">
-                <div class="pergunta-quiz">
+            <div class="box-perguntas-quiz" id="div_perguntas">
+                <!-- <div class="pergunta-quiz">
                     <span class="pergunta">1. Quem é o protagonista da série "Invencível"?</span>
                     <div class="alternativas">
                         <div class="opcao">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="box-botao-finalizar">
                 <button>FINALIZAR QUIZ</button>
@@ -77,6 +77,9 @@
 </body>
 </html>
 <script>
+
+    const styleElement = document.createElement('style');
+    let numRadio = 1;
 
     window.onload = () => {
 
@@ -92,7 +95,72 @@
         }).then((res) => {
             if(res.ok){
                 res.json().then((data) => {
-                    console.log(data);
+                    
+                    // esta lista tem as opcoes disponiveis que serão selecionadas aleatoriamente para montar cada pergunta do quiz
+                    let listaAlternativas = ['Mark Grayson', 'Nolan Grayson', 'O Immortal',  'Monster Girl', 'Debbie Grayson'];
+
+                    for(let i = 0; i < data.length; i++){
+
+                        let pergunta = data[i];
+                        div_perguntas.innerHTML += `
+                            <div class="pergunta-quiz">
+                                <span class="pergunta">${i + 1}. ${pergunta.pergunta}</span>
+                                <div class="alternativas" id="pergunta${i}">
+                                </div>
+                            </div>
+                        `;
+
+                        let numOpcoes = 1;
+                        let opcoes = [];
+                        while(numOpcoes <= 3){ // este laço vai embaralhar aleatoriamente as opcoes
+
+                            let alternativa = Math.random() * (listaAlternativas.length - 1) + 0;
+                            let opt = listaAlternativas[alternativa.toFixed()];
+
+                            if(pergunta.resposta != opt && opt != opcoes.find(x => x == opt)){
+                                opcoes.push(opt);
+                                numOpcoes++
+                            }
+                        }
+                        opcoes.push(pergunta.resposta);
+
+                        let numAlternativas = 1;
+                        let opcoesAdicionadas = [];
+                        while(numAlternativas <= 4){ // este laço vai montar as alternativas de forma embaralhada
+
+                            let alternativa = Math.random() * (opcoes.length - 1) + 0;
+                            let opt = opcoes[alternativa.toFixed()];
+
+                            let letra = numAlternativas == 1 ? 'A' : numAlternativas == 2 ? 'B' : numAlternativas == 3 ? 'C' : 'D'; 
+
+                            if(opcoesAdicionadas.find(x => x == opt) == undefined){
+
+                                document.getElementById(`pergunta${i}`).innerHTML += `
+                                    <div class="opcao">
+                                        <input type="radio" name="Pergunta${i}" id="radio${numRadio}">
+                                        <div class="box-label">
+                                            <label for="radio${numRadio}" class="label">${letra}. ${opt}</label>
+                                        </div>
+                                    </div>
+                                `;
+
+                                let css = `
+                                    #radio${numRadio}:checked ~ .box-label .label{
+                                        transition: 0.2s;
+                                        background-color: #cc2e5d;
+                                    }
+                                `;
+
+                                // isto aqui ira criar uma classe para cada radio de cada pergunta do quiz, permitindo com que ele tenha uma animacao de checked
+                                numRadio++;
+                                styleElement.textContent += css;
+                                document.body.appendChild(styleElement);
+
+                                opcoesAdicionadas.push(opt);
+                                numAlternativas++;
+                            }
+                        }
+                    }
                 })
             } else{
                 res.text().then((err) => {

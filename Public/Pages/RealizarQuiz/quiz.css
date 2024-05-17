@@ -205,6 +205,8 @@
     background-color: #b82853;
 }
 
+/*
+
 #radio1:checked ~ .box-label .label{
     transition: 0.2s;
     background-color: #cc2e5d;
@@ -223,7 +225,9 @@
 #radio4:checked ~ .box-label .label{
     transition: 0.2s;
     background-color: #cc2e5d;
-}
+} 
+
+*/
 
 .box-botao-finalizar{
     height: 10vh;
