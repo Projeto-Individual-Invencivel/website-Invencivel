@@ -98,9 +98,7 @@
 .container-pontuacao span{
     height: auto;
     padding: 1%;
-    background-color: green;
 
-    color: white;
     border-radius: 7px;
 }
 
@@ -146,6 +144,7 @@
 
 .box-title-graficos{
     margin-top: 3%;
+    text-align: center;
 }
 
 .box-graficos{

@@ -214,11 +214,18 @@
 
             if(res.ok){
                 res.json().then((data) => {
-                    console.log(data);
+
+                    sessionStorage.ID_TENTATIVA = data.idTentativa;
+                    sessionStorage.PONTUACAO = data.pontuacao;
+
+                    window.location.href = "../GraficosQuiz/graficos.html";
                 })
             } else{
                 res.text().then((err) => {
-                    console.error(err);
+                    Swal.fire({
+                        text: err,
+                        icon: 'error'
+                    })
                 })
             }
         })

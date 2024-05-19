@@ -52,7 +52,7 @@ const finalizarQuiz = async (req, res) => {
         }
     
         await quizModels.finalizarQuiz(insert);
-        const replicaRespostas = await quizModels.buscarRespostasUsuario(tentativa);
+        const replicaRespostas = await quizModels.buscarRespostasUsuario(tentativa, idUsuario);
 
         let pontuacao = 0;
         for(let i = 0; i < replicaRespostas.length; i++){
@@ -64,13 +64,55 @@ const finalizarQuiz = async (req, res) => {
         }
 
         quizModels.salvarPontuacao(tentativa, pontuacao, idUsuario, idQuiz).then((data) => {
+            data.idTentativa = tentativa;
+            data.pontuacao = pontuacao;
             res.status(203).json(data);
         })
     }
 }
 
+const buscarRespostas = async (req, res) => {
+    
+    const idQuiz = req.params.idQuiz;
+    const idUsuario = req.params.idUsuario;
+    const idTentativa = req.params.idTentativa;
+
+    const getQuiz = await quizModels.buscarQuizId(idQuiz).then((data) => {
+        return data.length <= 0 ? true : false;
+    }) 
+
+    const getUsuario = await usuarioModels.buscarUsuarioId(idUsuario).then((data) => {
+        return data.length <= 0 ? true : false;
+    })
+
+    let getTentativa = await quizModels.buscarRespostasUsuario(idTentativa, idUsuario).then((data) => {
+        return data.length <= 0 ? true : data;
+    })
+
+    if(getQuiz){
+        res.status(400).send('Este quiz não existe ou não foi encontrado');
+    } else if(getUsuario){
+        res.status(400).send('Este usuário não existe ou não foi encontrado');
+    } else if(getTentativa == true){
+        res.status(400).send('Você ainda não realizou nenhuma tentativa');
+    } else {
+        res.status(203).json(getTentativa);
+    }
+}
+
+const buscarRespostasQuiz = (req, res) => {
+
+    const idQuiz = req.params.idQuiz;
+
+    quizModels.buscarRespostaQuiz(idQuiz).then((data) => {
+        res.status(203).json(data);
+    })
+}
+
 module.exports = {
     buscarQuizzes,
     buscarPerguntas,
-    finalizarQuiz
+    finalizarQuiz,
+    buscarRespostas,
+    buscarRespostasQuiz
 }
