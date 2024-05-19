@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="../../Js/sessionStorage.js"></script>
 </head>
 <body>
@@ -67,7 +68,7 @@
                 </div> -->
             </div>
             <div class="box-botao-finalizar">
-                <button>FINALIZAR QUIZ</button>
+                <button onclick="montarRespostasQuiz()">FINALIZAR QUIZ</button>
             </div>
         </div>
     </div>
@@ -82,7 +83,10 @@
     let numRadio = 1;
 
     window.onload = () => {
+        montarQuiz();        
+    }
 
+    const montarQuiz = () => {
         h1_titulo.innerHTML = `Quiz: ${sessionStorage.TITULO}`;
         span_descricao.innerHTML = `${sessionStorage.DESCRICAO}`;
 
@@ -165,6 +169,56 @@
             } else{
                 res.text().then((err) => {
                     console.log(err);
+                })
+            }
+        })
+    }
+
+    const montarRespostasQuiz = () => {
+
+        const respostasUser = [];
+        const qtdPerguntas = (numRadio/4).toFixed();
+
+        for(let i = 0; i < qtdPerguntas; i++){
+
+            let escolha = document.querySelector(`input[name="Pergunta${i}"]:checked`);
+            if(escolha == null){
+                Swal.fire({
+                    html: `Você esqueceu de selecionar uma opção da <strong>pergunta ${i + 1}</strong>`,
+                    icon: 'error'
+                })
+                break;
+            } else {
+                let opcao = document.querySelector(`label[for="${escolha.id}"]`).textContent.substr(3);
+                respostasUser.push(opcao);
+            }
+        }
+        
+        if(respostasUser.length == qtdPerguntas){
+            finalizarQuiz(respostasUser);
+        }
+    }
+
+    const finalizarQuiz = (respostasUser) => {
+        
+        let url = `/quiz/responder/${sessionStorage.ID_USUARIO}/${sessionStorage.ID_QUIZ}`;
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                respostas: respostasUser
+            })
+        }).then((res) => {
+
+            if(res.ok){
+                res.json().then((data) => {
+                    console.log(data);
+                })
+            } else{
+                res.text().then((err) => {
+                    console.error(err);
                 })
             }
         })

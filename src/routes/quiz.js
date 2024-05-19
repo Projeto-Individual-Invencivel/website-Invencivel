@@ -11,4 +11,8 @@ router.get('/perguntas/:idQuiz', (req, res) => {
     quizController.buscarPerguntas(req, res);
 })
 
+router.post('/responder/:idUsuario/:idQuiz', (req, res) => {
+    quizController.finalizarQuiz(req, res);
+})
+
 module.exports = router
