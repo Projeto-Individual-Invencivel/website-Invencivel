@@ -23,4 +23,8 @@ router.get('/respostas/:idQuiz', (req, res) => {
     quizController.buscarRespostasQuiz(req, res);
 })
 
+router.get('/historico/:idUsuario/:idQuiz', (req, res) => {
+    quizController.historicoTentativasUsuario(req, res);
+})
+
 module.exports = router

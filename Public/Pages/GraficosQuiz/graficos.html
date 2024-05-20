@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="../../Js/sessionStorage.js"></script>
 </head>
 <body>
@@ -31,7 +32,7 @@
     <div class="container">
         <div class="container-pontuacao">
             <h1>Sua Pontuação:<span id="span_pontuacao"></span></h1>
-            <button>TENTAR DE NOVO</button>
+            <button onclick="Refazer()">TENTAR DE NOVO</button>
         </div>
         <div class="container-graficos-resposta">
             <div class="box-title-graficos">
@@ -59,35 +60,14 @@
 
     window.onload = async () => {
 
-        respostas();
+        montarGraficos();
     };
 
-    const graHistorico = document.getElementById('GraficoBarra');
-    graHistorico.width = '100%'
+    const Refazer = () => {
+        window.location.href = "../RealizarQuiz/quiz.html";
+    }
 
-    new Chart(graHistorico, {
-        type: 'bar',
-        data:{
-            labels: ['1° Tentativa', '2° Tentativa', '3° Tentativa', '4° Tentativa'],
-            datasets: [{
-                label: 'Quantidade de pontos',
-                data: [4, 3, 7, 9],
-                backgroundColor: [
-                    '#9C2348'
-                ]
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    min: 0,
-                    max: 10
-                }
-            }
-        }
-    })
-
-    const respostas = () => {
+    const montarGraficos = () => {
 
         let url = `/quiz/respostas/${sessionStorage.ID_USUARIO}/${sessionStorage.ID_QUIZ}/${sessionStorage.ID_TENTATIVA}`;
         fetch(url, {
@@ -101,6 +81,7 @@
                 res.json().then(async (data) => {
 
                     showPontuacao(data.length);
+                    await historicoTentativas(data.length);
                     let estatisticas = await respostasUsuarios(data.length);
 
                     for (let i = 0; i < data.length; i++) {
@@ -155,7 +136,72 @@
                 })
             } else{
                 res.text().then((err) => {
-                    console.error(err);
+                    Swal.fire({
+                        title: 'Ops... Algo deu errado!',
+                        text: err,
+                        icon: 'error'
+                    })
+                })
+            }
+        })
+    }
+
+    const historicoTentativas = (PontuacaoMax) => {
+
+        let url = `/quiz/historico/${sessionStorage.ID_USUARIO}/${sessionStorage.ID_QUIZ}`;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then((res) => {
+            if(res.ok){
+
+                res.json().then(data => {
+
+                    const historico = {
+                        tentativa: [],
+                        pontuacao: [],
+                    };
+
+                    for(let i = 0; i < data.length; i++){
+
+                        historico.tentativa.push(`${i + 1}° Tentativa`);
+                        historico.pontuacao.push(data[i].Pontuacao);
+                    }
+
+                    const graHistorico = document.getElementById('GraficoBarra');
+                    graHistorico.width = '100%'
+
+                    new Chart(graHistorico, {
+                        type: 'bar',
+                        data:{
+                            labels: historico.tentativa,
+                            datasets: [{
+                                label: `Acertos`,
+                                data: historico.pontuacao,
+                                backgroundColor: [
+                                    '#9C2348'
+                                ]
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    min: 0,
+                                    max: PontuacaoMax
+                                }
+                            }
+                        }
+                    })
+                })
+            } else{
+                res.text().then(err => {
+                    Swal.fire({
+                        title: 'Ops... Algo deu errado!',
+                        text: err,
+                        icon: 'error'
+                    })
                 })
             }
         })
@@ -214,7 +260,11 @@
                 })
             } else{
                 res.text().then((err) => {
-                    console.error(err);
+                    Swal.fire({
+                        title: 'Ops... Algo deu errado!',
+                        text: err,
+                        icon: 'error'
+                    })
                 })
             }
         })

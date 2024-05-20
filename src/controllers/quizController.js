@@ -109,10 +109,25 @@ const buscarRespostasQuiz = (req, res) => {
     })
 }
 
+const historicoTentativasUsuario = (req, res) => {
+
+    const idUsuario = req.params.idUsuario;
+    const idQuiz = req.params.idQuiz;
+
+    quizModels.buscarHistorico(idUsuario, idQuiz).then((data) => {
+        if(data.length == 0){
+            res.status(400).send('Nenhum histórico de pontuação foi encontrado');
+        } else {
+            res.status(203).json(data);
+        }
+    })
+}
+
 module.exports = {
     buscarQuizzes,
     buscarPerguntas,
     finalizarQuiz,
     buscarRespostas,
-    buscarRespostasQuiz
+    buscarRespostasQuiz,
+    historicoTentativasUsuario  
 }

@@ -63,6 +63,18 @@ const buscarRespostaQuiz = (idQuiz) => {
     return database.executar(script);
 }
 
+const buscarHistorico = (idUser, idQuiz) => {
+
+    const script = `select	distinct(tb_pontuacao_quiz.id_pontuacao_quiz) as 'Tentativa',
+	tb_pontuacao_quiz.fkUsuario as 'IdUsuario',
+    tb_pontuacao_quiz.fkQuiz as 'IdQuiz',
+	tb_pontuacao_quiz.qtdAcertos as 'Pontuacao'
+	from tb_pontuacao_quiz
+    where fkUsuario = ${idUser}
+    and fkQuiz = ${idQuiz}`;
+    return database.executar(script);
+}
+
 module.exports = {
     listarQuizzes,
     listarPerguntasQuiz,
@@ -71,5 +83,6 @@ module.exports = {
     buscarQuizId,
     buscarRespostasUsuario,
     salvarPontuacao,
-    buscarRespostaQuiz
+    buscarRespostaQuiz,
+    buscarHistorico
 }
