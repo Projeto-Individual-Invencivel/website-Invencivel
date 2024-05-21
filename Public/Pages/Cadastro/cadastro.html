@@ -37,8 +37,8 @@
                     <label>Nome de usuário: <input type="text" id="inp_nomeUser" placeholder="Informe seu nome de usuário"></label>
                     <label>Email: <input type="text" id="inp_emailUser" placeholder="example@example.com"></label>
                     <label>Data de nascimento: <input type="date" id="inp_dtNasc"></label>
-                    <label>Senha: <input type="text" id="inp_senhaUser" placeholder="ex: 123456789"></label>
-                    <label>Confirmar senha:<input type="text" id="inp_confirmarSenha" placeholder="ex: 123456789"></label>
+                    <label>Senha: <input type="password" id="inp_senhaUser" placeholder="ex: 123456789"></label>
+                    <label>Confirmar senha:<input type="password" id="inp_confirmarSenha" placeholder="ex: 123456789"></label>
                     <span>Já possui uma conta na plataforma? <a href="../Login/login.html">Clique aqui</a> e entre em nossa comunidade!</span>
                 </div>
                 <button onclick="Cadastrar()">ENTRAR</button>
@@ -56,7 +56,7 @@
 <script>
     const Cadastrar = () => {
 
-        const nome = inp_nomeUser.value;
+        const nome = (inp_nomeUser.value).replaceAll(' ', '');
         const email = inp_emailUser.value;
         const dtNasc = inp_dtNasc.value == "" ? "" : new Date(inp_dtNasc.value);
         const senhaUser = inp_senhaUser.value;
@@ -78,7 +78,6 @@
                 icon: 'error'
             })
         } else{
-
             let url = "/usuarios/cadastrar"
             fetch(url, {
                 method: 'POST',

@@ -121,16 +121,22 @@
 <script>
     window.onload = () => {
 
-        if(sessionStorage.ID_USUARIO != undefined){
-            link1NavBar.innerHTML = `
-                <a href="../Quizzes/quizzes.html">Quiz</a>
-            `;
-            link2NavBar.innerHTML = `
-                <a href="../../index.html" onclick="limpar()">Sair</a>
-            `;
-            div_responderTopico.style.display = "flex";
-        }
+        montarPostagem();
+        ajustarLayout();
+    }
 
+    btn_resposta.onclick = () => {
+        btn_resposta.innerHTML = "Publicar";
+        btn_cancelar.style.display = 'flex';
+        txt_resposta.style.display = "flex";
+    } 
+    btn_cancelar.onclick = () => {
+        btn_resposta.innerHTML = "Responder";
+        txt_resposta.style.display = "none";
+        btn_cancelar.style.display = 'none';
+    }
+
+    function montarPostagem() {
         let url = `/forum/discussao/${sessionStorage.ID_AUTOR}/${sessionStorage.ID_DISCUSSAO}`;
         fetch(url, {
             method: 'GET',
@@ -176,18 +182,9 @@
         })
     }
 
-    btn_resposta.onclick = () => {
-        btn_resposta.innerHTML = "Publicar";
-        btn_cancelar.style.display = 'flex';
-        txt_resposta.style.display = "flex";
-    } 
-    btn_cancelar.onclick = () => {
-        btn_resposta.innerHTML = "Responder";
-        txt_resposta.style.display = "none";
-        btn_cancelar.style.display = 'none';
-    }
-
     function organizarComentarios(comentarios){
+
+        const exibirBtnResponder = sessionStorage.ID_USUARIO != undefined ? 'display: flex;' : 'display: none';
 
         const comentariosPrincipais = [];
         for(let i = 0; i < comentarios.length; i++){
@@ -222,9 +219,9 @@
                             <div class="box-comentario-usuario">
                                 <span>${dadosComentario.comentario}</span>
                             </div>
-                            <div class="box-responder-comentario">
-                                <textarea id="" placeholder="Escreva sua resposta aqui"></textarea>
-                                <button class="btn-responder-comentario">Responder</button>
+                            <div class="box-responder-comentario" style="${exibirBtnResponder}">
+                                <textarea id="txt_resposta_comentario_principal${dadosComentario.id_comentario}" placeholder="Escreva sua resposta aqui"></textarea>
+                                <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario_principal${dadosComentario.id_comentario}, ${dadosComentario.id_comentario}, '${dadosComentario.autor}')">Responder</button>
                             </div>
                         </div>
                     </div>
@@ -235,6 +232,7 @@
             for(let index = 0; index < dadosComentario.respostas.length; index++){
 
                 const dadosResposta = dadosComentario.respostas[index];
+                let nomeUsuario = dadosComentario.autor.substr(0, dadosComentario.autor.indexOf(" "));
 
                 let newData = new Date(dadosResposta.dtPostagem);
                 let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}`;
@@ -255,18 +253,68 @@
                                 <div class="box-comentario-usuario">
                                     <span>${dadosResposta.comentario}</span>
                                 </div>
-                                <div class="box-responder-comentario">
-                                    <textarea id="" placeholder="Escreva sua resposta aqui"></textarea>
-                                    <button class="btn-responder-comentario">Responder</button>
+                                <div class="box-responder-comentario" style="${exibirBtnResponder}">
+                                    <textarea id="txt_resposta_comentario${dadosResposta.id_comentario}" placeholder="Escreva sua resposta aqui"></textarea>
+                                    <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario${dadosResposta.id_comentario}, ${dadosComentario.id_comentario}, '${dadosResposta.autor}')">Responder</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="box-resposta-comentario">
-                            
                         </div>
                     </div>
                 `;
             }
         }
+    }
+
+    function ajustarLayout(){
+        
+        if(sessionStorage.ID_USUARIO != undefined){
+            link1NavBar.innerHTML = `
+                <a href="../Quizzes/quizzes.html">Quiz</a>
+            `;
+            link2NavBar.innerHTML = `
+                <a href="../../index.html" onclick="limpar()">Sair</a>
+            `;
+            div_responderTopico.style.display = "flex";
+        }
+    }
+
+    function responderComentario(txtRespostaId, idRespostaComentario, autor) {
+
+        let comentarioReq = `${txtRespostaId.value}`;
+        const idAutor = sessionStorage.ID_AUTOR;
+        const idDiscussao = sessionStorage.ID_DISCUSSAO;
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if(comentarioReq == ""){
+            alert('Campo comentário vazio')
+        } else if(idAutor == 0 || idDiscussao == 0 || idUsuario == 0){
+            alert('Houve um erro ao tentar localizar o comentário')
+        } else{
+        
+            let url = `/comentario/responder/${idAutor}/${idDiscussao}/${idUsuario}/${idRespostaComentario}`;
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    comentario: `@${autor.replaceAll(' ', '')} ${comentarioReq}`
+                })
+            }).then((res) => {
+
+                if(res.ok){
+                    res.json().then((data) => {
+                        console.log(data)
+                    })
+                } else{
+                    res.text().then((err) => {
+                        console.error(err);
+                    })
+                }
+            })
+        }
+
+        
     }
 </script>

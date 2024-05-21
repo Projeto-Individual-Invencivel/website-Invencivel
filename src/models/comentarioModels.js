@@ -17,6 +17,13 @@ const comentariosPost = (idAutor, idDiscussao) => {
     return database.executar(script);
 }
 
+const responderComentario = (comentario, idDiscussao, idAutorDiscussao, idAutorComentario, idRespostaComentario) => {
+
+    const script = `insert into tb_comentario values (default, '${comentario}', default, ${idDiscussao}, ${idAutorDiscussao}, ${idAutorComentario}, ${idRespostaComentario})`;
+    return database.executar(script);
+}
+
 module.exports = {
-    comentariosPost
+    comentariosPost,
+    responderComentario
 }
