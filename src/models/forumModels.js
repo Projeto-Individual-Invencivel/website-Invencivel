@@ -23,7 +23,8 @@ function listarForuns(){
             join tb_usuario as usuario
                 on usuario.id_usuario = discussao.fkDiscussaoUsuario
             group by discussao.id_discussao, discussao.fkDiscussaoUsuario, 
-                discussao.titulo, discussao.descricao, discussao.dtPostagem;
+                discussao.titulo, discussao.descricao, discussao.dtPostagem
+            order by curtidas desc;
     `;
     return database.executar(script);
 }

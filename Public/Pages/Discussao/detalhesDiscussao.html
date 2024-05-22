@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="../../Js/sessionStorage.js"></script>
 </head>
 <body>
@@ -56,6 +57,7 @@
         <div class="container-resposta" id="div_responderTopico">
             <textarea id="txt_resposta" placeholder="Escreva sua resposta aqui"></textarea>
             <div>
+                <button class="btn-responder" id="btn_publicar">Publicar</button>
                 <button class="btn-responder" id="btn_resposta">Responder</button>
                 <button class="btn-cancelar" id="btn_cancelar">Cancelar</button>
             </div>
@@ -123,16 +125,67 @@
 
         montarPostagem();
         ajustarLayout();
+        btn_publicar.style.display = "none";
+    }
+
+    btn_publicar.onclick = () => {
+        
+        const respostaPost = txt_resposta.value;
+        const idAutor = sessionStorage.ID_AUTOR;
+        const idDiscussao = sessionStorage.ID_DISCUSSAO;
+        const idUsuario = sessionStorage.ID_USUARIO;
+
+        if(respostaPost == ""){
+            Swal.fire({
+                title: 'Ops... algo deu errado!',
+                text: 'Campo comentário vazio',
+                icon: 'error'
+            })
+        } else{
+            let url = `/forum/responder/${idDiscussao}/${idAutor}/${idUsuario}`;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    comentario: respostaPost
+                })
+            }).then((res) => {
+                if(res.ok){
+                    res.json().then((data) => {
+                        
+                        btn_publicar.style.display = "none";
+                        btn_resposta.style.display = "flex";
+
+                        txt_resposta.value = "";
+                        window.onload();
+                    })
+                } else {
+                    res.text().then((err) => {
+                        Swal.fire({
+                            title: 'Ops... algo de errado!',
+                            text: err,
+                            icon: 'error'
+                        })
+                    })
+                }
+            })
+        }
     }
 
     btn_resposta.onclick = () => {
-        btn_resposta.innerHTML = "Publicar";
         btn_cancelar.style.display = 'flex';
         txt_resposta.style.display = "flex";
+        btn_resposta.style.display = "none";
+        btn_publicar.style.display = "flex";
     } 
     btn_cancelar.onclick = () => {
+
         btn_resposta.innerHTML = "Responder";
         txt_resposta.style.display = "none";
+        btn_resposta.style.display = "flex";
+        btn_publicar.style.display = "none";
         btn_cancelar.style.display = 'none';
     }
 
@@ -286,9 +339,17 @@
         const idUsuario = sessionStorage.ID_USUARIO;
 
         if(comentarioReq == ""){
-            alert('Campo comentário vazio')
+            Swal.fire({
+                title: 'Ops... algo deu errado!',
+                text: 'Campo comentário vazio',
+                icon: 'error'
+            })
         } else if(idAutor == 0 || idDiscussao == 0 || idUsuario == 0){
-            alert('Houve um erro ao tentar localizar o comentário')
+            Swal.fire({
+                title: 'Ops... algo deu errado!',
+                text: 'Houve um erro ao tentar localizar o comentário',
+                icon: 'error'
+            })
         } else{
         
             let url = `/comentario/responder/${idAutor}/${idDiscussao}/${idUsuario}/${idRespostaComentario}`;
@@ -305,11 +366,17 @@
 
                 if(res.ok){
                     res.json().then((data) => {
-                        console.log(data)
+
+                        txtRespostaId.value = "";
+                        window.onload();
                     })
                 } else{
                     res.text().then((err) => {
-                        console.error(err);
+                        Swal.fire({
+                            title: 'Ops... algo deu errado!',
+                            text: err,
+                            icon: 'error'
+                        })
                     })
                 }
             })

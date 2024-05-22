@@ -15,4 +15,9 @@ router.get('/discussao/:idUsuario/:idDiscussao', (req, res) => {
     forumController.detalhesDiscussao(req, res);  
 })
 
+router.post('/responder/:idPostagem/:idAutor/:idUsuario', (req, res) => {
+    forumController.responderPostagem(req, res);
+})
+
+
 module.exports = router;

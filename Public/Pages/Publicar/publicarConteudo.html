@@ -102,9 +102,13 @@
                             text: 'Você será redirecionado para o seu post',
                             icon: 'success'
                         });
+
+                        sessionStorage.ID_DISCUSSAO = data[0].id_discussao;
+                        sessionStorage.ID_AUTOR = data[0].fkDiscussaoUsuario;
+
                         setTimeout(() => {
                             window.location.href = '../Discussao/detalhesDiscussao.html';
-                        }, 3000)
+                        }, 2000)
                     })
                 } else{
                     res.text().then((err) => {

@@ -223,6 +223,11 @@
     cursor: pointer;
     border-radius: 4px;
 
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+
     color: white;
     font-size: 1.1em;
     font-weight: bold;

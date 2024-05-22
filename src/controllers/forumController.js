@@ -28,7 +28,8 @@ async function Publicar(req, res){
             return posts.length == 0 ? 1 : posts.length + 1;
         }));
 
-        forumModels.postarConteudo(idAutor, idPost, titulo, descricao, dtPost).then((data) => {
+        await forumModels.postarConteudo(idAutor, idPost, titulo, descricao, dtPost);
+        forumModels.buscarPostId(idAutor, idPost).then((data) => {
             res.status(203).json(data);
         })
     }
@@ -56,8 +57,37 @@ async function detalhesDiscussao(req, res){
     }
 }
 
+async function responderPostagem(req, res){
+
+    const comentario = req.body.comentario;
+    const idPost = req.params.idPostagem;
+    const idAutor = req.params.idAutor;
+    const idAutorComentario = req.params.idUsuario;
+
+    const getPost = await forumModels.buscarPostId(idAutor, idPost).then((data) => {
+        return data[0];
+    })
+
+    const getUsuario = await usuarioModels.buscarUsuarioId(idAutorComentario).then((data) => {
+        return data[0];
+    })
+
+    if(comentario.trim() == ""){
+        res.status(400).send("Campo comentário está vazio");
+    } else if(getPost == undefined){
+        res.status(400).send("Houve um problema ao localizar a sua postagem");
+    } else if(getUsuario == undefined){
+        res.status(400).send("Houve um problema ao localizar o seu usuário");
+    } else {
+        comentariosModels.responderComentario(comentario, idPost, idAutor, idAutorComentario, null).then((data) => {
+            res.status(203).json(data);
+        })
+    }
+}
+
 module.exports = {
     Forum,
     Publicar,
-    detalhesDiscussao
+    detalhesDiscussao,
+    responderPostagem
 }
