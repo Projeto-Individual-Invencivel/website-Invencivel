@@ -58,7 +58,7 @@
             <textarea id="txt_resposta" placeholder="Escreva sua resposta aqui"></textarea>
             <div>
                 <button class="btn-responder" id="btn_publicar">Publicar</button>
-                <button class="btn-responder" id="btn_resposta">Responder</button>
+                <button class="btn-responder" id="btn_resposta" disabled>Responder</button>
                 <button class="btn-cancelar" id="btn_cancelar">Cancelar</button>
             </div>
         </div>
@@ -189,6 +189,97 @@
         btn_cancelar.style.display = 'none';
     }
 
+    function Curtir(){
+        
+        if(sessionStorage.ID_USUARIO == undefined){
+            Swal.fire({
+                text: 'Você precisa entrar na plataforma para interagir nas publicações',
+                icon: 'error',
+                showCancelButton: false,
+                showDenyButton: true,
+                confirmButtonText: 'Entrar',
+                denyButtonText: 'Cancelar'
+            }).then((resultado) => {
+                if(resultado.isConfirmed){
+                    window.location.href = "../Login/login.html";
+                }
+            })
+        } else {
+            let url = `/forum/curtir/${sessionStorage.ID_USUARIO}/${sessionStorage.ID_AUTOR}/${sessionStorage.ID_DISCUSSAO}`;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then((resposta) => {
+                if(resposta.ok){
+
+                    buttonLike = document.getElementById('btn_curtir');
+
+                    buttonLike.disabled = true;
+                    buttonLike.style.backgroundColor = "#DBDBDB";
+
+                    buttonDislike = document.getElementById('btn_descurtir');
+                    buttonDislike.disabled = false;
+                    buttonDislike.style.backgroundColor = "";
+
+                    numeroCurtidas.innerHTML = parseInt(numeroCurtidas.textContent) + 1;
+                } else{
+                    resposta.text().then((err) => {
+                        Swal.fire({
+                            text: err
+                        })
+                    })
+                }
+            })
+        }
+    }
+
+    function Descurtir(){
+        if(sessionStorage.ID_USUARIO == undefined){
+            Swal.fire({
+                text: 'Você precisa entrar na plataforma para interagir nas publicações',
+                icon: 'error',
+                showCancelButton: false,
+                showDenyButton: true,
+                confirmButtonText: 'Entrar',
+                denyButtonText: 'Cancelar'
+            }).then((resultado) => {
+                if(resultado.isConfirmed){
+                    window.location.href = "../Login/login.html";
+                }
+            })
+        } else{
+            let url = `/forum/descurtir/${sessionStorage.ID_USUARIO}/${sessionStorage.ID_AUTOR}/${sessionStorage.ID_DISCUSSAO}`;
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then((resposta) => {
+                if(resposta.ok){
+
+                    buttonDislike = document.getElementById('btn_descurtir');
+
+                    buttonDislike.disabled = true;
+                    buttonDislike.style.backgroundColor = "#DBDBDB";
+
+                    buttonLike = document.getElementById('btn_curtir');
+                    buttonLike.disabled = false;
+                    buttonLike.style.backgroundColor = "";
+
+                    numeroCurtidas.innerHTML = numeroCurtidas.textContent - 1;
+                } else{
+                    resposta.text().then((err) => {
+                        Swal.fire({
+                            text: err
+                        })
+                    })
+                }
+            })
+        }
+    }
+
     function montarPostagem() {
         let url = `/forum/discussao/${sessionStorage.ID_AUTOR}/${sessionStorage.ID_DISCUSSAO}`;
         fetch(url, {
@@ -206,9 +297,9 @@
 
                     div_postagem.innerHTML = `
                         <div class="box-likes">
-                            <button><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
-                            <span>${data.curtidas}</span>
-                            <button><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
+                            <button onclick="Curtir()" id="btn_curtir"><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
+                            <span id="numeroCurtidas">${data.curtidas}</span>
+                            <button onclick="Descurtir()" id="btn_descurtir"><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
                         </div>
                         <div class="box-topico">
                             <div class="box-dados-post">

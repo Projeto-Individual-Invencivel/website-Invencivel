@@ -9,7 +9,7 @@ function listarForuns(){
             discussao.titulo,
             discussao.descricao,
             discussao.dtPostagem,
-            (select count(tb_curtida_discussao.id_curtida_discussao) 
+            (select count(tb_curtida_discussao.fkDiscussao) 
                 from tb_curtida_discussao
                 WHERE tb_curtida_discussao.fkDiscussao = discussao.id_discussao
                 and discussao.fkDiscussaoUsuario = tb_curtida_discussao.fkAutorDiscussao
@@ -43,7 +43,31 @@ function postarConteudo(idAutor, idPost, titulo, descricao, dtPost){
 
 function buscarPostId(idUser, idDiscussao){
 
-    const script = `SELECT discussao.*, (select tb_usuario.nome from tb_usuario where id_usuario = ${idUser}) as autor, (select count(tb_curtida_discussao.id_curtida_discussao) from tb_curtida_discussao WHERE tb_curtida_discussao.fkDiscussao = discussao.id_discussao and discussao.fkDiscussaoUsuario = tb_curtida_discussao.fkAutorDiscussao) as curtidas FROM tb_discussao as discussao WHERE id_discussao = ${idDiscussao} AND fkDiscussaoUsuario = ${idUser};`;
+    const script = `SELECT discussao.*, (select tb_usuario.nome from tb_usuario where id_usuario = ${idUser}) as autor, (select count(tb_curtida_discussao.fkDiscussao) from tb_curtida_discussao WHERE tb_curtida_discussao.fkDiscussao = discussao.id_discussao and discussao.fkDiscussaoUsuario = tb_curtida_discussao.fkAutorDiscussao) as curtidas FROM tb_discussao as discussao WHERE id_discussao = ${idDiscussao} AND fkDiscussaoUsuario = ${idUser};`;
+    return database.executar(script);
+}
+
+function buscarCurtidaPostagem(idPost, idAutorPost, idUsuario){
+
+    const script = `SELECT * FROM tb_curtida_discussao 
+	WHERE fkDiscussao = ${idPost} 
+    AND fkAutorDiscussao = ${idAutorPost} 
+    AND fkAutorCurtida = ${idUsuario}`;
+    return database.executar(script);
+}
+
+function curtirPostagem(idUser, idAutor, idPost){
+
+    const script = `INSERT INTO tb_curtida_discussao values(${idPost}, ${idAutor}, ${idUser})`;
+    return database.executar(script);
+}
+
+function descurtirPostagem(idUser, idAutor, idPost){
+
+    const script = `DELETE FROM tb_curtida_discussao 
+	WHERE fkDiscussao = ${idPost} 
+    AND fkAutorDiscussao = ${idAutor} 
+    AND fkAutorCurtida = ${idUser}`;
     return database.executar(script);
 }
 
@@ -51,5 +75,8 @@ module.exports = {
     listarForuns,
     listarPostsUser,
     postarConteudo,
-    buscarPostId
+    buscarPostId,
+    buscarCurtidaPostagem,
+    curtirPostagem,
+    descurtirPostagem
 }

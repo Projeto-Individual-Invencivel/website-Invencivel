@@ -85,9 +85,65 @@ async function responderPostagem(req, res){
     }
 }
 
+const curtirPostagem = async (req, res) => {
+
+    const idUsuario = req.params.idUsuario;
+    const idAutorPost = req.params.idAutor;
+    const idPost = req.params.idPostagem;
+
+    const post = await forumModels.buscarPostId(idAutorPost, idPost).then((data) => {
+        return data[0];
+    })
+
+    const getUser = await usuarioModels.buscarUsuarioId(idUsuario).then((data) => {
+        return data[0];
+    })
+
+    const getLike = await forumModels.buscarCurtidaPostagem(idPost, idAutorPost, idUsuario).then((data) => {
+        return data[0];
+    })
+
+    if(idUsuario == 0 || idAutorPost == 0 || idPost == 0){
+        res.status(400).send("Não foi possível curtir a postagem");
+    } else if(post == undefined){
+        res.status(400).send("Houve um erro ao localizar esta postagem");
+    } else if(getUser == undefined){
+        res.status(400).send("Houve um erro ao tentar localizar o seu usuário");
+    } else if(getLike != undefined){
+        res.status(400).send("Você não pode recurtir a mesma postagem");
+    } else{ 
+        forumModels.curtirPostagem(idUsuario, idAutorPost, idPost).then((data) => {
+            res.status(200).json(data);
+        })
+    }
+}
+
+const descurtirPostagem = async (req, res) => {
+
+    const idUsuario = req.params.idUsuario;
+    const idAutorPost = req.params.idAutor;
+    const idPost = req.params.idPostagem;
+
+    const getLike = await forumModels.buscarCurtidaPostagem(idPost, idAutorPost, idUsuario).then((data) => {
+        return data[0];
+    })
+
+    if(idUsuario == 0 || idAutorPost == 0 || idPost == 0){
+        res.status(400).send("Não foi possivel descurtir a postagem")
+    } else if(getLike == undefined){
+        res.status(400).send("Não foi possível descurtir a postagem");
+    } else {
+        forumModels.descurtirPostagem(idUsuario, idAutorPost, idPost).then((data) => {
+            res.status(200).json(data);
+        })
+    }
+}
+
 module.exports = {
     Forum,
     Publicar,
     detalhesDiscussao,
-    responderPostagem
+    responderPostagem,
+    curtirPostagem,
+    descurtirPostagem
 }

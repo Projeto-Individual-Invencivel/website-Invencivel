@@ -19,5 +19,12 @@ router.post('/responder/:idPostagem/:idAutor/:idUsuario', (req, res) => {
     forumController.responderPostagem(req, res);
 })
 
+router.post('/curtir/:idUsuario/:idAutor/:idPostagem', (req, res) => {
+    forumController.curtirPostagem(req, res);
+})
+
+router.delete('/descurtir/:idUsuario/:idAutor/:idPostagem', (req, res) => {
+    forumController.descurtirPostagem(req, res);
+})
 
 module.exports = router;
