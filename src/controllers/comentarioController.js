@@ -31,6 +31,54 @@ const responderComentario = (req, res) => {
     }
 }
 
+const curtirComentario = async (req, res) => {
+ 
+    const idAutorCurtida = req.params.idUsuario;
+    const idComentario = req.params.idComentario;
+
+    const usuario = await usuarioModels.buscarUsuarioId(idAutorCurtida).then(data => {
+        return data[0];
+    })
+
+    const comentario = await comentarioModels.buscarCurtidaComentarioId(idComentario, idAutorCurtida).then(data => {
+        return data[0];
+    })
+    
+    if(idAutorCurtida == 0 || idComentario == 0){
+        res.status(400).send("Não foi possível curtir este comentário");
+    } else if(usuario == undefined){
+        res.status(400).send("Houve um erro ao localizar o seu usuário");
+    } else if(comentario != undefined){
+        res.status(400).send("Você não pode recurtir este comentário");
+    } else{
+        comentarioModels.curtirComentario(idComentario, idAutorCurtida).then((data) => {
+            res.status(200).json(data);
+        })
+    }
+}
+
+const descurtirComentario = async (req, res) => {
+
+    const idAutorCurtida = req.params.idUsuario;
+    const idComentario = req.params.idComentario;
+
+    const comentario = await comentarioModels.buscarCurtidaComentarioId(idComentario, idAutorCurtida).then(data => {
+        return data[0];
+    })
+
+    if(idAutorCurtida == 0 || idComentario == 0){
+        res.status(400).send("Não foi possível descurtir este comentário");
+    } else if(comentario == undefined){
+        res.status(400).send("Você não pode descurtir este comentário");
+    } else{
+        comentarioModels.descurtirComentario(idComentario, idAutorCurtida).then((data) => {
+            res.status(200).json(data);
+        })
+    }
+}
+
 module.exports = {
-    responderComentario
+    responderComentario,
+    curtirComentario,
+    descurtirComentario
 }

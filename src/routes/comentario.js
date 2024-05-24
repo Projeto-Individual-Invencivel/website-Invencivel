@@ -7,4 +7,12 @@ router.post('/responder/:idAutorDiscussao/:idDiscussao/:idAutorComentario/:idRes
     comentarioController.responderComentario(req, res);
 })
 
+router.post('/curtir/:idUsuario/:idComentario', (req, res) => {
+    comentarioController.curtirComentario(req, res);
+})
+
+router.delete('/descurtir/:idUsuario/:idComentario', (req, res) => {
+    comentarioController.descurtirComentario(req, res);
+})
+
 module.exports = router;

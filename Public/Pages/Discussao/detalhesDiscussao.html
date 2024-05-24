@@ -58,7 +58,7 @@
             <textarea id="txt_resposta" placeholder="Escreva sua resposta aqui"></textarea>
             <div>
                 <button class="btn-responder" id="btn_publicar">Publicar</button>
-                <button class="btn-responder" id="btn_resposta" disabled>Responder</button>
+                <button class="btn-responder" id="btn_resposta">Responder</button>
                 <button class="btn-cancelar" id="btn_cancelar">Cancelar</button>
             </div>
         </div>
@@ -347,13 +347,18 @@
             let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}` 
 
             const dadosComentario = comentariosPrincipais[i];
+            const idComentarioPrincipal = dadosComentario.id_comentario;
+            const spanComentario = `span_comentario${idComentarioPrincipal}`;
+            const btnCurtirComentario = `btn_curtir_comentario${idComentarioPrincipal}`;
+            const btnDescurtirComentario = `btn_descurtir_comentario${idComentarioPrincipal}`;
+
             div_comentarios.innerHTML += `
                 <div class="estrutura-comentario">
                     <div class="box-comentario">
                         <div class="box-likes-comentario">
-                            <button><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
-                            <span>${dadosComentario.curtidas}</span>
-                            <button><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
+                            <button onclick="curtirComentario(${idComentarioPrincipal}, ${spanComentario}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnCurtirComentario}"><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
+                            <span id="${spanComentario}">${dadosComentario.curtidas}</span>
+                            <button onclick="descurtirComentario(${idComentarioPrincipal}, ${spanComentario}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnDescurtirComentario}"><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
                         </div>
                         <div class="box-dados-comentario">
                             <div class="box-autor-comentario">
@@ -364,8 +369,8 @@
                                 <span>${dadosComentario.comentario}</span>
                             </div>
                             <div class="box-responder-comentario" style="${exibirBtnResponder}">
-                                <textarea id="txt_resposta_comentario_principal${dadosComentario.id_comentario}" placeholder="Escreva sua resposta aqui"></textarea>
-                                <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario_principal${dadosComentario.id_comentario}, ${dadosComentario.id_comentario}, '${dadosComentario.autor}')">Responder</button>
+                                <textarea id="txt_resposta_comentario_principal${idComentarioPrincipal}" placeholder="Escreva sua resposta aqui"></textarea>
+                                <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario_principal${idComentarioPrincipal}, ${idComentarioPrincipal}, '${dadosComentario.autor}')">Responder</button>
                             </div>
                         </div>
                     </div>
@@ -381,13 +386,18 @@
                 let newData = new Date(dadosResposta.dtPostagem);
                 let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}`;
 
+                const idComentario = dadosResposta.id_comentario;
+                const spanRespostaComent = `span_comentario${idComentario}`;    
+                const btnCurtirComentario = `btn_curtir_comentario${idComentario}`;
+                const btnDescurtirComentario = `btn_descurtir_comentario${idComentario}`;
+
                 document.getElementById(`respostaComentario${i}`).innerHTML += `
                     <div class="estrutura-comentario">
                         <div class="box-comentario">
                             <div class="box-likes-comentario">
-                                <button><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
-                                <span>${dadosResposta.curtidas}</span>
-                                <button><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
+                                <button onclick="curtirComentario(${idComentario}, ${spanRespostaComent}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnCurtirComentario}"><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
+                                <span id="${spanRespostaComent}">${dadosResposta.curtidas}</span>
+                                <button onclick="descurtirComentario(${idComentario}, ${spanRespostaComent}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnDescurtirComentario}"><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
                             </div>
                             <div class="box-dados-comentario">
                                 <div class="box-autor-comentario">
@@ -398,8 +408,8 @@
                                     <span>${dadosResposta.comentario}</span>
                                 </div>
                                 <div class="box-responder-comentario" style="${exibirBtnResponder}">
-                                    <textarea id="txt_resposta_comentario${dadosResposta.id_comentario}" placeholder="Escreva sua resposta aqui"></textarea>
-                                    <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario${dadosResposta.id_comentario}, ${dadosComentario.id_comentario}, '${dadosResposta.autor}')">Responder</button>
+                                    <textarea id="txt_resposta_comentario${idComentario}" placeholder="Escreva sua resposta aqui"></textarea>
+                                    <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario${idComentario}, ${dadosComentario.id_comentario}, '${dadosResposta.autor}')">Responder</button>
                                 </div>
                             </div>
                         </div>
@@ -474,5 +484,95 @@
         }
 
         
+    }
+
+    function curtirComentario(idComentario, spanLikesComentario, idBtnLike, idBtnDislike){
+
+        if(sessionStorage.ID_USUARIO == undefined){
+            Swal.fire({
+                text: 'Você precisa entrar na plataforma para interagir nas publicações',
+                icon: 'error',
+                showCancelButton: false,
+                showDenyButton: true,
+                confirmButtonText: 'Entrar',
+                denyButtonText: 'Cancelar'
+            }).then((resultado) => {
+                if(resultado.isConfirmed){
+                    window.location.href = "../Login/login.html";
+                }
+            })
+        } else {
+
+            let url = `/comentario/curtir/${sessionStorage.ID_USUARIO}/${idComentario}`; 
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then((resposta) => {
+                if(resposta.ok){
+                    resposta.json().then((data) => {
+
+                        idBtnLike.disabled = true;
+                        idBtnLike.style.backgroundColor = "#DBDBDB";
+                        spanLikesComentario.innerHTML = parseInt(spanLikesComentario.textContent) + 1;
+
+                        idBtnDislike.disabled = false;
+                        idBtnDislike.style.backgroundColor = "";
+                    })
+                } else{
+                    resposta.text().then((err) => {
+                        Swal.fire({
+                            text: err
+                        })
+                    })
+                }
+            })
+        }
+    }
+
+    function descurtirComentario(idComentario, spanLikesComentario, idBtnLike, idBtnDislike){
+        
+        if(sessionStorage.ID_USUARIO == undefined){
+            Swal.fire({
+                text: 'Você precisa entrar na plataforma para interagir nas publicações',
+                icon: 'error',
+                showCancelButton: false,
+                showDenyButton: true,
+                confirmButtonText: 'Entrar',
+                denyButtonText: 'Cancelar'
+            }).then((resultado) => {
+                if(resultado.isConfirmed){
+                    window.location.href = "../Login/login.html";
+                }
+            })
+        } else {
+
+            let url = `/comentario/descurtir/${sessionStorage.ID_USUARIO}/${idComentario}`; 
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then((resposta) => {
+                if(resposta.ok){
+                    resposta.json().then((data) => {
+                        
+                        idBtnLike.disabled = false;
+                        idBtnLike.style.backgroundColor = "";
+                        spanLikesComentario.innerHTML = parseInt(spanLikesComentario.textContent) - 1;
+
+                        idBtnDislike.disabled = true;
+                        idBtnDislike.style.backgroundColor = "#DBDBDB";
+                    })
+                } else{
+                    resposta.text().then((err) => {
+                        Swal.fire({
+                            text: err
+                        })
+                    })
+                }
+            })
+        }
     }
 </script>

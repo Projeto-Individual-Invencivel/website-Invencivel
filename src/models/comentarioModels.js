@@ -5,7 +5,7 @@ const comentariosPost = (idAutor, idDiscussao) => {
     const script = `
         SELECT tb_comentario.*,
         tb_usuario.nome as autor,
-        (SELECT count(tb_curtida_comentario.id_curtida_comentario) 
+        (SELECT count(tb_curtida_comentario.fkComentario) 
             FROM tb_curtida_comentario 
             WHERE tb_curtida_comentario.fkComentario = tb_comentario.id_comentario) as curtidas
         FROM tb_comentario 
@@ -23,7 +23,28 @@ const responderComentario = (comentario, idDiscussao, idAutorDiscussao, idAutorC
     return database.executar(script);
 }
 
+const buscarCurtidaComentarioId = (idComentario, idAutorCurtida) => {
+
+    const script = `SELECT * FROM tb_curtida_comentario WHERE fkComentario = ${idComentario} AND fkAutorCurtida = ${idAutorCurtida};`;
+    return database.executar(script);
+}
+
+const curtirComentario = (idComentario, idAutorCurtida) => {
+
+    const script = `INSERT INTO tb_curtida_comentario VALUES(${idComentario}, ${idAutorCurtida})`;
+    return database.executar(script);
+}
+
+const descurtirComentario = (idComentario, idAutorCurtida) => {
+
+    const script = `DELETE FROM tb_curtida_comentario WHERE fkComentario = ${idComentario} AND fkAutorCurtida = ${idAutorCurtida}`;
+    return database.executar(script);
+}
+
 module.exports = {
     comentariosPost,
-    responderComentario
+    responderComentario,
+    buscarCurtidaComentarioId,
+    curtirComentario,
+    descurtirComentario
 }
