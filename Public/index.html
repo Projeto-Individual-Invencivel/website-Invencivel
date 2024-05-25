@@ -88,9 +88,63 @@
                 </div>
             </div>
         </div>
+        <div class="container-publico">
+            <div class="box-onu">
+                <div class="box-img-onu">
+                    <img src="../Public/Assets/Images/ods-3.jpg" alt="objetivo de desenvolvimento sustentavel 3" height="90%">
+                </div>
+                <span>A série contribuiu para o meu bem-estar porque durante a época de pandemia eu pude relaxar e esquecer um pouco que estavamos passando por essa crise, ajudou bastante a descontrair e espero que faça o mesmo com quem irá vê-la.</span>
+            </div>
+            <div class="box-grafico-publico">
+                <canvas id="grafico-publico"></canvas>
+            </div>
+        </div>
         <div class="footer">
             <span>©BrunoGomes 2024 Todos os direitos reservados.</span>
         </div>
     </div>
 </body>
 </html>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+    const grafico = document.getElementById('grafico-publico');
+    grafico.width = '100%';
+    new Chart(grafico, {
+        type: 'pie',
+        data: {
+            labels: ['Menores de 18', 'Entre 18 e 24 anos', 'Entre 25 e 29 anos', 'Entre 30 e 34 anos', '+34'],
+            datasets: [
+                {
+                    label: 'Porcentagem de presença',
+                    data: [3, 4, 5, 8, 3],
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'left',
+                    labels: {
+                        font: {
+                            size: 18
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Idade do público que frequenta a plataforma',
+                    font: {
+                        size: 24,
+                        weight: '700'
+                    },
+                    margin: {
+                        top: 20
+                    }
+                }
+            }
+        }
+    })
+
+</script>
