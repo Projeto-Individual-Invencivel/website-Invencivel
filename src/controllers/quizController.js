@@ -37,22 +37,29 @@ const finalizarQuiz = async (req, res) => {
         let tentativa = 0;
         let insert = ``;
     
-        for(let idPergunta = 1; idPergunta <= respostas.length; idPergunta++){
+        const getFirstId = await quizModels.getIdFirstQuestionQuiz(idQuiz).then((data) => {
+            return data[0].id_pergunta;
+        })
+    
+        let idPergunta = getFirstId;
+        for(let cont = 1; cont <= respostas.length; cont++){
     
             let getLastId = await quizModels.buscarUltimaResposta(idUsuario, idPergunta, idQuiz).then((data) => {
                 return data[0] == undefined ? 1 : data[0].id_resposta_usuario + 1;
             })
             tentativa = getLastId;
 
-            if(idPergunta < respostas.length){
-                insert += `\n (${getLastId}, '${respostas[idPergunta - 1]}', ${idUsuario}, ${idPergunta}, ${idQuiz}),`;
+            if(cont < respostas.length){
+                insert += `\n (${getLastId}, '${respostas[cont - 1]}', ${idUsuario}, ${idPergunta}, ${idQuiz}),`;
+                idPergunta++;
             } else{
-                insert += `\n (${getLastId}, '${respostas[idPergunta - 1]}', ${idUsuario}, ${idPergunta}, ${idQuiz});`;
+                insert += `\n (${getLastId}, '${respostas[cont - 1]}', ${idUsuario}, ${idPergunta}, ${idQuiz});`;
+                idPergunta++
             }
         }
     
         await quizModels.finalizarQuiz(insert);
-        const replicaRespostas = await quizModels.buscarRespostasUsuario(tentativa, idUsuario);
+        const replicaRespostas = await quizModels.buscarRespostasUsuario(tentativa, idUsuario, idQuiz);
 
         let pontuacao = 0;
         for(let i = 0; i < replicaRespostas.length; i++){
@@ -85,7 +92,7 @@ const buscarRespostas = async (req, res) => {
         return data.length <= 0 ? true : false;
     })
 
-    let getTentativa = await quizModels.buscarRespostasUsuario(idTentativa, idUsuario).then((data) => {
+    let getTentativa = await quizModels.buscarRespostasUsuario(idTentativa, idUsuario, idQuiz).then((data) => {
         return data.length <= 0 ? true : data;
     })
 
@@ -123,11 +130,21 @@ const historicoTentativasUsuario = (req, res) => {
     })
 }
 
+const buscarAlternativasQuiz = (req, res) => {
+
+    const idQuiz = req.params.idQuiz;
+
+    quizModels.buscarAlternativasQuiz(idQuiz).then((alternativas) => {
+        res.status(200).json(alternativas);
+    })
+}
+
 module.exports = {
     buscarQuizzes,
     buscarPerguntas,
     finalizarQuiz,
     buscarRespostas,
     buscarRespostasQuiz,
-    historicoTentativasUsuario  
+    historicoTentativasUsuario,
+    buscarAlternativasQuiz
 }

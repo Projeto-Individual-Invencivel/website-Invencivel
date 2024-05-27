@@ -209,7 +209,7 @@
 
     const respostasUsuarios = async (numPerguntas) => {
 
-        const alternativas = [];
+        const escolhas = [];
 
         let url = `/quiz/respostas/${sessionStorage.ID_QUIZ}`;
         await fetch(url, {
@@ -228,10 +228,10 @@
                         porcentagem: [],
                         cores: ['#9C2348', '#33BFE7', '#F7E953', '#F68E1B', '#EA5E77', '#09090D']
                     }
-                    for(let i = 1; i <= 8; i++){
+                    for(let i = 1; i <= numPerguntas; i++){
 
                         model.idPergunta = i;
-                        let opcoes = data.filter(x => x.Pergunta == i);
+                        let opcoes = data.filter(x => x.Pergunta == data[i-1].Pergunta);
 
                         for(let item = 0; item < opcoes.length; item++){
 
@@ -239,7 +239,7 @@
                             model.alternativas.push(alt.Resposta);
 
                             let pontosTotais = 0;
-                            opcoes.map(x => {
+                            opcoes.map(x => {''
                                 pontosTotais += x.qtdOpcaoSelecionada;
                             })
 
@@ -248,7 +248,7 @@
                             model.porcentagem.push(porcentagem.toFixed(2));
                             model.cores = model.cores.slice(0, opcoes.length);
                         }
-                        alternativas.push(model);
+                        escolhas.push(model);
 
                         model = {
                             idPergunta: 0,
@@ -268,7 +268,7 @@
                 })
             }
         })
-        return alternativas;
+        return escolhas;
     }
 
     const showPontuacao = (pontuacaoMax) => {

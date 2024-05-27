@@ -83,10 +83,26 @@
     let numRadio = 1;
 
     window.onload = () => {
-        montarQuiz();        
+
+        fetch(`/quiz/alternativas/${sessionStorage.ID_QUIZ}`, {
+            method: 'GET',
+            headers: {
+                "Content-Type": 'application/json'
+            }
+        }).then(resposta => {
+            resposta.json().then((data) => {
+                
+                let listaAlternativas = [];
+                for(let i = 0; i < data.length; i++){
+                    listaAlternativas.push(data[i].alternativa);
+                }
+
+                montarQuiz(listaAlternativas);        
+            })
+        })
     }
 
-    const montarQuiz = () => {
+    const montarQuiz = async (listaAlternativas) => {
         h1_titulo.innerHTML = `Quiz: ${sessionStorage.TITULO}`;
         span_descricao.innerHTML = `${sessionStorage.DESCRICAO}`;
 
@@ -98,11 +114,8 @@
             }
         }).then((res) => {
             if(res.ok){
-                res.json().then((data) => {
+                res.json().then(async (data) => {
                     
-                    // esta lista tem as opcoes disponiveis que serão selecionadas aleatoriamente para montar cada pergunta do quiz
-                    let listaAlternativas = ['Mark Grayson', 'Nolan Grayson', 'Amber Bennett',  'Cecil Stedman', 'Debbie Grayson'];
-
                     for(let i = 0; i < data.length; i++){
 
                         let pergunta = data[i];

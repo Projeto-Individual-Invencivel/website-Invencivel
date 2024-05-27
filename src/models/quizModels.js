@@ -31,7 +31,7 @@ const finalizarQuiz = (respostas) => {
     return database.executar(script);
 }
 
-const buscarRespostasUsuario = (Tentativa, idUser) => {
+const buscarRespostasUsuario = (Tentativa, idUser, idQuiz) => {
 
     const script = `SELECT tb_resposta_usuario.id_resposta_usuario AS 'Tentativa',
 	tb_resposta_usuario.fkQuiz AS 'Quiz',
@@ -41,7 +41,7 @@ const buscarRespostasUsuario = (Tentativa, idUser) => {
     from tb_resposta_usuario
     JOIN tb_pergunta
     ON tb_pergunta.id_pergunta = tb_resposta_usuario.fkPergunta
-    WHERE id_resposta_usuario = ${Tentativa} AND tb_resposta_usuario.fkUsuario = ${idUser}`;
+    WHERE id_resposta_usuario = ${Tentativa} AND tb_resposta_usuario.fkUsuario = ${idUser} AND tb_resposta_usuario.fkQuiz = ${idQuiz}`;
     return database.executar(script);
 }
 
@@ -75,6 +75,18 @@ const buscarHistorico = (idUser, idQuiz) => {
     return database.executar(script);
 }
 
+const buscarAlternativasQuiz = (idQuiz) => {
+
+    const script = `SELECT alternativa FROM tb_alternativas WHERE fkQuiz = ${idQuiz}`;
+    return database.executar(script);
+}
+
+const getIdFirstQuestionQuiz = (idQuiz) => {
+
+    const script = `SELECT id_pergunta FROM tb_pergunta WHERE fkQuiz = ${idQuiz} LIMIT 1`;
+    return database.executar(script);
+}
+
 module.exports = {
     listarQuizzes,
     listarPerguntasQuiz,
@@ -84,5 +96,7 @@ module.exports = {
     buscarRespostasUsuario,
     salvarPontuacao,
     buscarRespostaQuiz,
-    buscarHistorico
+    buscarHistorico,
+    buscarAlternativasQuiz,
+    getIdFirstQuestionQuiz
 }
