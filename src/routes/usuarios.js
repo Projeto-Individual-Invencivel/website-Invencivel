@@ -12,4 +12,8 @@ router.post('/cadastrar', (req, res) => {
     usuarioController.cadastrar(req, res);
 })
 
+router.get('/idade-publico', (req, res) => {
+    usuarioController.idadePublico(req, res);
+})
+
 module.exports = router;

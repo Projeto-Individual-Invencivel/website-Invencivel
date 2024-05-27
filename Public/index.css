@@ -320,6 +320,10 @@ body{
     background-color: #49D63C;
 }
 
+.box-img-onu img{
+    border-radius: 4px;
+}
+
 .box-onu span{
     width: 70%;
     margin-top: 2%;

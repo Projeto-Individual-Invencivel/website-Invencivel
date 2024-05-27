@@ -56,7 +56,15 @@ async function cadastrar(req, res){
     }
 }
 
+function idadePublico(req, res) {
+
+    usuarioModel.buscarIdadePublic().then((data) => {
+        res.status(200).json(data);
+    })
+}
+
 module.exports = {
     login,
-    cadastrar
+    cadastrar,
+    idadePublico
 }

@@ -26,9 +26,16 @@ function buscarUsuarioId(idUser){
     return database.executar(script);
 }
 
+function buscarIdadePublic(){
+
+    var script = `select year(dtNasc) as 'anoNascimento'from tb_usuario`;
+    return database.executar(script);
+}
+
 module.exports = {
     login,
     cadastrar,
     buscarEmail,
-    buscarUsuarioId
+    buscarUsuarioId,
+    buscarIdadePublic
 };

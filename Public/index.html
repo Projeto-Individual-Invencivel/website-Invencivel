@@ -108,43 +108,85 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-    const grafico = document.getElementById('grafico-publico');
-    grafico.width = '100%';
-    new Chart(grafico, {
-        type: 'pie',
-        data: {
-            labels: ['Menores de 18', 'Entre 18 e 24 anos', 'Entre 25 e 29 anos', 'Entre 30 e 34 anos', '+34'],
-            datasets: [
-                {
-                    label: 'Porcentagem de presença',
-                    data: [3, 4, 5, 8, 3],
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'left',
-                    labels: {
-                        font: {
-                            size: 18
-                        }
-                    }
-                },
-                title: {
-                    display: true,
-                    text: 'Idade do público que frequenta a plataforma',
-                    font: {
-                        size: 24,
-                        weight: '700'
-                    },
-                    margin: {
-                        top: 20
-                    }
-                }
-            }
-        }
-    })
+    window.onload = () => {
 
+        fetch('/usuarios/idade-publico', {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(resposta => {
+            if(resposta.ok){
+                resposta.json().then((data) => {
+
+                    const idadeUsers = [0, 0, 0, 0, 0];
+
+
+                    for(let i = 0; i < data.length; i++){
+                        
+                        const idade = data[i];
+                        if((2024 - idade.anoNascimento) < 18){
+                            idadeUsers[0]++   
+                        } else if((2024 - idade.anoNascimento) <= 24){
+                            idadeUsers[1]++
+                        } else if((2024 - idade.anoNascimento) <= 29){
+                            idadeUsers[2]++
+                        } else if((2024 - idade.anoNascimento) <= 34){
+                            idadeUsers[3]++
+                        } else{
+                            idadeUsers[4]++
+                        }
+                    }                    
+
+                    const dadosPorcentagem = [];
+                    idadeUsers.map((i) => {
+                        dadosPorcentagem.push(((i / data.length) * 100).toFixed(2));
+                    })
+
+                    const grafico = document.getElementById('grafico-publico');
+                    grafico.width = '100%';
+                    new Chart(grafico, {
+                        type: 'pie',
+                        data: {
+                            labels: ['Menores de 18', 'Entre 18 e 24 anos', 'Entre 25 e 29 anos', 'Entre 30 e 34 anos', '+34'],
+                            datasets: [
+                                {
+                                    label: 'Porcentagem de presença',
+                                    data: dadosPorcentagem,
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'left',
+                                    labels: {
+                                        font: {
+                                            size: 18
+                                        }
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Idade do público que frequenta a plataforma',
+                                    font: {
+                                        size: 24,
+                                        weight: '700'
+                                    },
+                                    margin: {
+                                        top: 20
+                                    }
+                                }
+                            }
+                        }
+                    })
+                })
+            } else{
+                resposta.text().then(err => {
+                    console.error(err);
+                })
+            }
+        })
+    }
 </script>
