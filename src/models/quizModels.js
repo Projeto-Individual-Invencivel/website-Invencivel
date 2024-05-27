@@ -2,7 +2,13 @@ const database = require('../database/config');
 
 const listarQuizzes = (idUser) => {
 
-    const script = `SELECT tb_quiz.*, (select count(tb_pontuacao_quiz.id_pontuacao_quiz) FROM tb_pontuacao_quiz WHERE fkUsuario = ${idUser}) AS tentativas FROM tb_quiz`;
+    const script = `SELECT tb_quiz.*, 
+    COUNT(tb_pontuacao_quiz.id_pontuacao_quiz) AS tentativas 
+	FROM tb_quiz
+	JOIN tb_pontuacao_quiz 
+    ON tb_quiz.id_quiz = tb_pontuacao_quiz.fkQuiz 
+    AND tb_pontuacao_quiz.fkUsuario = ${idUser}
+	GROUP BY tb_quiz.id_quiz;`;
     return database.executar(script);
 }
 
