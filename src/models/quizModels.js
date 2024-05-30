@@ -5,7 +5,7 @@ const listarQuizzes = (idUser) => {
     const script = `SELECT tb_quiz.*, 
     COUNT(tb_pontuacao_quiz.id_pontuacao_quiz) AS tentativas 
 	FROM tb_quiz
-	JOIN tb_pontuacao_quiz 
+	LEFT JOIN tb_pontuacao_quiz 
     ON tb_quiz.id_quiz = tb_pontuacao_quiz.fkQuiz 
     AND tb_pontuacao_quiz.fkUsuario = ${idUser}
 	GROUP BY tb_quiz.id_quiz;`;
