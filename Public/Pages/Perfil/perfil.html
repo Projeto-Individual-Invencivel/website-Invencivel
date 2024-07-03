@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="perfil.css">
+    <script src="../../Js/sessionStorage.js"></script>
+    <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="navBar">
+        <div class="box-img">
+            <a href="../../index.html">
+                <img src="../../Assets/Images/logo-website.png" width="135em" height="70em" alt="imagem com o texto 'invencivel'" onclick="limpar()">
+            </a>
+        </div>
+        <div class="box-links">
+            <ul>
+                <li><a href="#" style="text-decoration: underline;">Perfil</a></li>
+                <li>|</li>
+                <li><a href="../Forum/forum.html">Fórum</a></li>
+                <li>|</li>
+                <li><a href="../Quizzes/quizzes.html">Quiz</a></li>
+                <li>|</li>
+                <li><a href="../../index.html">Sair</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="container">
+        <div class="box-usuario">
+            <div class="info-usuario">
+                <h2>Suas Informações:</h2>
+                <input type="text" placeholder="Nome de usuário" value="BrunoGomes">
+                <input type="text" placeholder="Email do usuário" value="brunogomes2023@gmail.com">
+                <input type="date" value="2001-01-01">
+                <div class="box-eventos">
+                    <button class="btn-salvar">Salvar</button>
+                    <button class="btn-descartar">Descartar</button>
+                </div>
+            </div>
+            <div class="info-publicacoes">
+                <div class="box-extras">
+                    <div class="circle" style="background-color: #78F51D;">100</div>
+                    <strong>Curtidas recebidas</strong>
+                </div>
+                <div class="box-extras">
+                    <div class="circle" style="background-color: #2AF56F;">100</div>
+                    <strong>Postagens publicadas</strong>
+                </div>
+                <div class="box-extras">
+                    <div class="circle" style="background-color: #5DF55D;">100</div>
+                    <strong>Comentários publicados</strong>
+                </div>
+            </div>
+        </div>
+        <div class="box-interacoes">
+            <div class="box-tipos-conteudos">
+                <div class="box-titulo-pub" id="btn_postagens">
+                    <strong>Postagens</strong>
+                </div>
+                <div class="box-titulo-com" id="btn_comentarios">
+                    <strong>Comentários</strong>
+                </div>
+            </div>
+            <div class="box-conteudos" id="div_postagens">
+                <div class="conteudos">
+                    <div class="info-conteudo">
+                        <h3>Cenas épicas em Invecível</h3>
+                        <div>
+                            <ul>
+                                <li>Curtidas: 12</li>
+                                <li>|</li>
+                                <li>Postagem: 12/01/2024</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-conteudo">
+                        <h3>Teorias sobre Invencível: Próximos Episódios', 'Quais são as suas teorias para os próximos episódios de Invencível? Compartilhe suas especulações e expectativas.</h3>
+                        <div>
+                            <ul>
+                                <li>Curtidas: 12</li>
+                                <li>|</li>
+                                <li>Postagem: 12/01/2024</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-conteudos" id="div_comentarios">
+                <div class="conteudos">
+                    <div class="info-conteudo">
+                        <h3>Cenas épicas em Invecível</h3>
+                        <div>
+                            <ul>
+                                <li>Curtidas: 12</li>
+                                <li>|</li>
+                                <li>Postagem: 12/01/2024</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="info-conteudo">
+                        <h3>Teorias sobre Invencível: Próximos Episódios', 'Quais são as suas teorias para os próximos episódios de Invencível? Compartilhe suas especulações e expectativas.</h3>
+                        <div>
+                            <ul>
+                                <li>Curtidas: 12</li>
+                                <li>|</li>
+                                <li>Postagem: 12/01/2024</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <span>©BrunoGomes 2024 Todos os direitos reservados.</span>
+    </div>
+</body>
+</html>
+<script>
+    window.onload = () => {
+
+        div_comentarios.style.display = 'none';
+        btn_comentarios.classList.toggle('padrao');
+        btn_postagens.classList.toggle('selecionado');
+    }
+
+    btn_postagens.onclick = () => {
+
+        btn_comentarios.classList.remove('selecionado');
+        btn_comentarios.classList.add('padrao');
+
+        btn_postagens.classList.add('selecionado');
+        btn_postagens.classList.remove('padrao');
+
+        div_postagens.style.display = 'flex';
+        div_comentarios.style.display = 'none';
+    }
+    btn_comentarios.onclick = () => {
+        
+        btn_comentarios.classList.add('selecionado');
+        btn_comentarios.classList.remove('padrao');
+
+        btn_postagens.classList.remove('selecionado');
+        btn_postagens.classList.add('padrao');
+
+        div_postagens.style.display = 'none';
+        div_comentarios.style.display = 'flex';
+    }
+</script>
