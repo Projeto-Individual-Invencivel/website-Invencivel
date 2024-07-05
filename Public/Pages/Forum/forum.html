@@ -19,7 +19,7 @@
             </a>
         </div>
         <div class="box-links">
-            <ul>
+            <ul id="linksNavegacao">
                 <li><a href="#" style="text-decoration: underline;">Fórum</a></li>
                 <li>|</li>
                 <li id="link1NavBar"><a href="../Login/login.html">Login</a></li>
@@ -71,15 +71,27 @@
 
         if(sessionStorage.ID_USUARIO != undefined){
 
-            link1NavBar.innerHTML = `
-                <a href="../Quizzes/quizzes.html">Quiz</a>
-            `;
-            link2NavBar.innerHTML = `
-                <a href="../../index.html" onclick="limpar()">Sair</a>
+            linksNavegacao.innerHTML = `
+                <li><a href="../Perfil/perfil.html">Perfil</a></li>
+                <li>|</li>
+                <li><a href="#" style="text-decoration: underline;">Fórum</a></li>
+                <li>|</li>
+                <li><a href="../Quizzes/quizzes.html">Quiz</a></li>
+                <li>|</li>
+                <li><a href="../../index.html" onclick="limpar()">Sair</a></li>
             `;
         
             a_criarTopico.style.display = "flex";
             p_nmUsuario.innerHTML = `Bem vindo, ${sessionStorage.NOME}`;
+        } else{
+            
+            linksNavegacao.innerHTML = `
+                <li><a href="#" style="text-decoration: underline;">Fórum</a></li>
+                <li>|</li>
+                <li><a href="../Login/login.html">Login</a></li>
+                <li>|</li>
+                <li><a href="../Cadastro/cadastro.html">Cadastro</a></li>
+            `;
         }
     
         let url = "/forum/listar";
