@@ -1,6 +1,6 @@
 const database = require('../database/config');
 
-function listarForuns(){
+function listarForuns(filtro){
 
     const script = `
         select discussao.id_discussao,  
@@ -24,7 +24,7 @@ function listarForuns(){
                 on usuario.id_usuario = discussao.fkDiscussaoUsuario
             group by discussao.id_discussao, discussao.fkDiscussaoUsuario, 
                 discussao.titulo, discussao.descricao, discussao.dtPostagem
-            order by curtidas desc;
+            order by ${filtro};
     `;
     return database.executar(script);
 }

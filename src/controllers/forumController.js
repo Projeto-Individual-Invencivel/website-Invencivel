@@ -4,7 +4,7 @@ const comentariosModels = require('../models/comentarioModels');
 
 function Forum(req, res){
 
-    forumModels.listarForuns().then((data) => {
+    forumModels.listarForuns(req.params.filtro).then((data) => {
         res.status(203).json(data);
     })
 }

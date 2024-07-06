@@ -35,7 +35,14 @@
             </p>
             <div class="box-button-topico">
                 <h1>Discussões do Fórum:</h1>
-                <a href="../Publicar/publicarConteudo.html" class="btn-criar-topico" id="a_criarTopico">Criar tópico</a>
+                <div class="box-eventos">
+                    <select id="slc_filtros" onchange="listarDiscussoes()">
+                        <option value="populares">Populares</option>
+                        <option value="novos">Novos</option>
+                        <option value="antigos">Antigos</option>
+                    </select>
+                    <a href="../Publicar/publicarConteudo.html" class="btn-criar-topico" id="a_criarTopico">Criar tópico</a>
+                </div>
             </div>
         </div>
         <div class="container-discussoes">
@@ -93,8 +100,15 @@
                 <li><a href="../Cadastro/cadastro.html">Cadastro</a></li>
             `;
         }
-    
-        let url = "/forum/listar";
+        listarDiscussoes();
+    }
+
+    const listarDiscussoes = () => {
+        
+        let selecao = slc_filtros.value;
+        const filtro = selecao == 'populares' ? 'curtidas desc' : selecao == 'novos' ? 'dtPostagem desc' : selecao == 'antigos' ? 'dtPostagem' : 'curtidas desc';
+        
+        let url = `/forum/listar/${filtro}`;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -110,7 +124,11 @@
 
                         let model = data[i];
                         let newData = new Date(model.dtPostagem);
-                        let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}` 
+
+                        let dia = newData.getDate() < 10 ? '0' + newData.getDate() : newData.getDate();
+                        let minuto = newData.getMinutes() < 10 ? '0' + newData.getMinutes() : newData.getMinutes();
+
+                        let formData = `${dia}/${newData.getMonth() + 1}/${newData.getFullYear()} às ${newData.getHours()}:${minuto}` 
 
                         let estrutura = `
                             <div class="box-topico">

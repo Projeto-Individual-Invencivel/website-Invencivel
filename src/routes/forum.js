@@ -3,7 +3,7 @@ var router = express.Router();
 
 const forumController = require('../controllers/forumController');
 
-router.get("/listar", (req, res) => {
+router.get("/listar/:filtro", (req, res) => {
     forumController.Forum(req, res);
 })
 
