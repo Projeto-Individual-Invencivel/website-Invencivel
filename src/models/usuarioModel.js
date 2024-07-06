@@ -32,10 +32,31 @@ function buscarIdadePublic(){
     return database.executar(script);
 }
 
+function buscarInteracoesUsuario(idUsuario){
+
+    var script = `
+    select tb_usuario.id_usuario,
+	tb_usuario.nome, 
+	tb_usuario.email,
+    tb_usuario.dtNasc,
+	(select count(id_discussao) from tb_discussao where fkDiscussaoUsuario = tb_usuario.id_usuario) as posts,
+    (select count(id_comentario) from tb_comentario where fkAutorComentario = tb_usuario.id_usuario) as coments,
+    (select count(fkAutorCurtida) from tb_curtida_discussao where fkAutorDiscussao = tb_usuario.id_usuario) as likesPosts,
+    (select count(fkAutorCurtida) from tb_curtida_comentario join tb_comentario on id_comentario = fkComentario
+     where tb_usuario.id_usuario = tb_comentario.fkAutorComentario) as likesComments
+    from tb_usuario
+    left join tb_discussao on tb_discussao.fkDiscussaoUsuario = tb_usuario.id_usuario
+    left join tb_comentario on tb_comentario.id_comentario = tb_usuario.id_usuario
+    where id_usuario = ${idUsuario}
+    group by id_usuario, nome, email, dtNasc, posts, coments, likesPosts, likesComments;`;
+    return database.executar(script);
+}
+
 module.exports = {
     login,
     cadastrar,
     buscarEmail,
     buscarUsuarioId,
-    buscarIdadePublic
+    buscarIdadePublic,
+    buscarInteracoesUsuario
 };

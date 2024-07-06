@@ -34,25 +34,25 @@
         <div class="box-usuario">
             <div class="info-usuario">
                 <h2>Suas Informações:</h2>
-                <input type="text" placeholder="Nome de usuário" value="BrunoGomes">
-                <input type="text" placeholder="Email do usuário" value="brunogomes2023@gmail.com">
-                <input type="date" value="2001-01-01">
+                <input type="text" placeholder="Nome de usuário" id="inp_nomeUsuario" value="BrunoGomes">
+                <input type="text" placeholder="Email do usuário" id="inp_emailUsuario" value="brunogomes2023@gmail.com">
+                <input type="date" value="2001-01-01" id="inp_nascUsuario">
                 <div class="box-eventos">
                     <button class="btn-salvar">Salvar</button>
-                    <button class="btn-descartar">Descartar</button>
+                    <button class="btn-descartar" onclick="infoUsuario()">Descartar</button>
                 </div>
             </div>
             <div class="info-publicacoes">
                 <div class="box-extras">
-                    <div class="circle" style="background-color: #78F51D;">100</div>
+                    <div class="circle" style="background-color: #78F51D;" id="div_numCurtidas"></div>
                     <strong>Curtidas recebidas</strong>
                 </div>
                 <div class="box-extras">
-                    <div class="circle" style="background-color: #2AF56F;">100</div>
+                    <div class="circle" style="background-color: #2AF56F;" id="div_numPostagens"></div>
                     <strong>Postagens publicadas</strong>
                 </div>
                 <div class="box-extras">
-                    <div class="circle" style="background-color: #5DF55D;">100</div>
+                    <div class="circle" style="background-color: #5DF55D;" id="div_numComentarios"></div>
                     <strong>Comentários publicados</strong>
                 </div>
             </div>
@@ -127,6 +127,8 @@
         div_comentarios.style.display = 'none';
         btn_comentarios.classList.toggle('padrao');
         btn_postagens.classList.toggle('selecionado');
+
+        infoUsuario();
     }
 
     btn_postagens.onclick = () => {
@@ -150,5 +152,35 @@
 
         div_postagens.style.display = 'none';
         div_comentarios.style.display = 'flex';
+    }
+
+    const infoUsuario = () => {
+
+        fetch(`/usuarios/perfil/${sessionStorage.ID_USUARIO}`, {
+            method: 'GET',
+            mode: 'cors'
+        }).then((res) => {
+            if(res.ok){
+                res.json().then((data) => {
+                    
+                    inp_nomeUsuario.value = data.nome;
+                    inp_emailUsuario.value = data.email;
+                
+                    let dtFormatada = new Date(data.dtNasc);
+                    let mes = dtFormatada.getMonth() + 1;
+                    mes = mes < 10 ? '0' + mes : mes;
+
+                    inp_nascUsuario.value = `${dtFormatada.getFullYear()}-${mes}-${dtFormatada.getDate()}`;
+                
+                    div_numCurtidas.innerHTML = `${data.likesPosts + data.likesComments}`;
+                    div_numPostagens.innerHTML = data.posts;
+                    div_numComentarios.innerHTML = data.coments;
+                })
+            } else{
+                res.text().then((err) => {
+                    console.log(err);
+                })
+            }
+        })
     }
 </script>

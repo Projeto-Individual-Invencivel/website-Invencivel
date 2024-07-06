@@ -181,8 +181,8 @@
 }
 
 .circle{
-    height: 70%;
-    width: 60%;
+    height: 100px;
+    width: 90px;
     background-color: #49D63C;
 
     display: flex;

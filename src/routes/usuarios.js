@@ -16,4 +16,8 @@ router.get('/idade-publico', (req, res) => {
     usuarioController.idadePublico(req, res);
 })
 
+router.get('/perfil/:idUsuario', (req, res) => {
+    usuarioController.perfil(req, res);
+})
+
 module.exports = router;

@@ -63,8 +63,15 @@ function idadePublico(req, res) {
     })
 }
 
+function perfil(req, res){
+    usuarioModel.buscarInteracoesUsuario(req.params.idUsuario).then((data) => {
+        res.status(203).json(data[0]);
+    })
+}
+
 module.exports = {
     login,
     cadastrar,
-    idadePublico
+    idadePublico,
+    perfil
 }
