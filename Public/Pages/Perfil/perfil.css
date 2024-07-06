@@ -335,3 +335,9 @@
     font-weight: bolder;
     background-color: black;
 }
+
+.span-inscricao{
+    font-weight: bolder;
+    font-size: 1.1em;
+    color: #858585;
+}

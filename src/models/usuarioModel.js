@@ -39,6 +39,7 @@ function buscarInteracoesUsuario(idUsuario){
 	tb_usuario.nome, 
 	tb_usuario.email,
     tb_usuario.dtNasc,
+    tb_usuario.dtContaCriada,
 	(select count(id_discussao) from tb_discussao where fkDiscussaoUsuario = tb_usuario.id_usuario) as posts,
     (select count(id_comentario) from tb_comentario where fkAutorComentario = tb_usuario.id_usuario) as coments,
     (select count(fkAutorCurtida) from tb_curtida_discussao where fkAutorDiscussao = tb_usuario.id_usuario) as likesPosts,

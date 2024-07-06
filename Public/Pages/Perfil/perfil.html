@@ -32,11 +32,12 @@
     </div>
     <div class="container">
         <div class="box-usuario">
-            <div class="info-usuario">
+            <div class="info-usuario" id="div_informacoesUsuario">
                 <h2>Suas Informações:</h2>
                 <input type="text" placeholder="Nome de usuário" id="inp_nomeUsuario" value="BrunoGomes">
                 <input type="text" placeholder="Email do usuário" id="inp_emailUsuario" value="brunogomes2023@gmail.com">
                 <input type="date" value="2001-01-01" id="inp_nascUsuario">
+                <span class="span-inscricao" id="span_dtInscricao"></span>
                 <div class="box-eventos">
                     <button class="btn-salvar">Salvar</button>
                     <button class="btn-descartar" onclick="infoUsuario()">Descartar</button>
@@ -154,9 +155,9 @@
         div_comentarios.style.display = 'flex';
     }
 
-    const infoUsuario = () => {
+    const infoUsuario = (idUsuario) => {
 
-        fetch(`/usuarios/perfil/${sessionStorage.ID_USUARIO}`, {
+        fetch(`/usuarios/perfil/${idUsuario}`, {
             method: 'GET',
             mode: 'cors'
         }).then((res) => {
@@ -175,6 +176,7 @@
                     div_numCurtidas.innerHTML = `${data.likesPosts + data.likesComments}`;
                     div_numPostagens.innerHTML = data.posts;
                     div_numComentarios.innerHTML = data.coments;
+                    span_dtInscricao.innerHTML = dataInscricao(new Date(data.dtContaCriada));
                 })
             } else{
                 res.text().then((err) => {
@@ -182,5 +184,15 @@
                 })
             }
         })
+    }
+
+    const dataInscricao = (ContaCriada) => {
+
+        const dt = new Date(ContaCriada);
+
+        const meses = [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+        const msg = `Na plataforma desde ${meses[dt.getMonth()]} de ${dt.getFullYear()}`;
+        return msg;
     }
 </script>

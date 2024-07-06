@@ -291,7 +291,11 @@
                 res.json().then((data) => {
                     
                     let newData = new Date(data.dtPostagem);
-                    let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}` 
+
+                    let dia = newData.getDate() < 10 ? '0' + newData.getDate() : newData.getDate();
+                    let minuto = newData.getMinutes() < 10 ? '0' + newData.getMinutes() : newData.getMinutes();
+
+                    let formData = `${dia}/${newData.getMonth() + 1}/${newData.getFullYear()} às ${newData.getHours()}:${minuto}`; 
 
                     div_postagem.innerHTML = `
                         <div class="box-likes">
@@ -301,7 +305,7 @@
                         </div>
                         <div class="box-topico">
                             <div class="box-dados-post">
-                                <span>${data.autor}</span>
+                                <span onclick="visitarPerfil(${data.fkDiscussaoUsuario})">${data.autor}</span>
                                 <span>Postagem: ${formData}</span>
                             </div>
                             <div class="box-titulo-post">
@@ -342,7 +346,11 @@
         for(let i = 0; i < comentariosPrincipais.length; i++){
 
             let newData = new Date(comentariosPrincipais[i].dtPostagem);
-            let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}` 
+
+            let dia = newData.getDate() < 10 ? '0' + newData.getDate() : newData.getDate();
+            let minuto = newData.getMinutes() < 10 ? '0' + newData.getMinutes() : newData.getMinutes();
+
+            let formData = `${dia}/${newData.getMonth() + 1}/${newData.getFullYear()} às ${newData.getHours()}:${minuto}`; 
 
             const dadosComentario = comentariosPrincipais[i];
             const idComentarioPrincipal = dadosComentario.id_comentario;
@@ -360,7 +368,7 @@
                         </div>
                         <div class="box-dados-comentario">
                             <div class="box-autor-comentario">
-                                <span>${dadosComentario.autor}</span>
+                                <span onclick="visitarPerfil(${dadosComentario.fkAutorComentario})">${dadosComentario.autor}</span>
                                 <span>Postagem: ${formData}</span>
                             </div>
                             <div class="box-comentario-usuario">
@@ -382,7 +390,11 @@
                 let nomeUsuario = dadosComentario.autor.substr(0, dadosComentario.autor.indexOf(" "));
 
                 let newData = new Date(dadosResposta.dtPostagem);
-                let formData = `${newData.getDate()}/${newData.getMonth() + 1}/${newData.getFullYear()}`;
+
+                let dia = newData.getDate() < 10 ? '0' + newData.getDate() : newData.getDate();
+                let minuto = newData.getMinutes() < 10 ? '0' + newData.getMinutes() : newData.getMinutes();
+
+                let formData = `${dia}/${newData.getMonth() + 1}/${newData.getFullYear()} às ${newData.getHours()}:${minuto}`;
 
                 const idComentario = dadosResposta.id_comentario;
                 const spanRespostaComent = `span_comentario${idComentario}`;    
@@ -399,7 +411,7 @@
                             </div>
                             <div class="box-dados-comentario">
                                 <div class="box-autor-comentario">
-                                    <span>${dadosResposta.autor}</span>
+                                    <span onclick="visitarPerfil(${dadosResposta.fkAutorComentario})">${dadosResposta.autor}</span>
                                     <span>Postagem: ${formData}</span>
                                 </div>
                                 <div class="box-comentario-usuario">
@@ -424,7 +436,7 @@
             linksNavegacao.innerHTML = `
                 <li><a href="../Perfil/perfil.html">Perfil</a></li>
                 <li>|</li>
-                <li><a href="#" style="text-decoration: underline;">Fórum</a></li>
+                <li><a href="../Forum/forum.html">Fórum</a></li>
                 <li>|</li>
                 <li><a href="../Quizzes/quizzes.html">Quiz</a></li>
                 <li>|</li>
@@ -434,7 +446,7 @@
         } else{
             
             linksNavegacao.innerHTML = `
-                <li><a href="#" style="text-decoration: underline;">Fórum</a></li>
+                <li><a href="../Forum/forum.html">Fórum</a></li>
                 <li>|</li>
                 <li><a href="../Login/login.html">Login</a></li>
                 <li>|</li>
@@ -586,5 +598,11 @@
                 }
             })
         }
+    }
+
+    function visitarPerfil(idUsuario){
+
+        sessionStorage.ID_VISITANTE = idUsuario;
+        window.location.href = '../Perfil/perfil.html';
     }
 </script>
