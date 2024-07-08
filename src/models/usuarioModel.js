@@ -53,11 +53,39 @@ function buscarInteracoesUsuario(idUsuario){
     return database.executar(script);
 }
 
+function buscarPostagens(idUsuario){
+
+    var script = `select titulo,
+	dtPostagem,
+    (select count(fkAutorCurtida) from tb_curtida_discussao where fkDiscussao = id_discussao and fkAutorDiscussao = fkDiscussaoUsuario) as curtidas
+    from tb_discussao
+    left join tb_curtida_discussao
+    on fkDiscussao = id_discussao and fkAutorDiscussao = fkDiscussaoUsuario
+    where fkDiscussaoUsuario = ${idUsuario}
+    group by id_discussao, titulo, fkDiscussaoUsuario, dtPostagem;`;
+    return database.executar(script);
+}
+
+function buscarComentarios(idUsuario){
+
+    var script = `select comentario,
+	dtPostagem,
+    (select count(fkAutorCurtida) from tb_curtida_comentario where fkComentario = id_comentario) as curtidas
+    from tb_comentario
+    left join tb_curtida_comentario
+    on tb_curtida_comentario.fkComentario = tb_comentario.id_comentario
+    where fkAutorComentario = ${idUsuario}
+    group by id_comentario, fkAutorComentario, comentario, dtPostagem;`;
+    return database.executar(script);
+}
+
 module.exports = {
     login,
     cadastrar,
     buscarEmail,
     buscarUsuarioId,
     buscarIdadePublic,
-    buscarInteracoesUsuario
+    buscarInteracoesUsuario,
+    buscarPostagens,
+    buscarComentarios
 };

@@ -20,4 +20,8 @@ router.get('/perfil/:idUsuario', (req, res) => {
     usuarioController.perfil(req, res);
 })
 
+router.get('/publicacoes/:idUsuario', (req, res) => {
+    usuarioController.publicacoesUsuario(req, res);
+})
+
 module.exports = router;

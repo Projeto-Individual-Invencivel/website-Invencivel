@@ -69,9 +69,31 @@ function perfil(req, res){
     })
 }
 
+async function publicacoesUsuario(req, res){
+
+    const idUsuario = req.params.idUsuario;
+    const interacoes = {
+        postagens: [],
+        comentarios: []
+    }
+
+    await usuarioModel.buscarPostagens(idUsuario).then((data) =>  {
+        data.forEach(post => {
+            interacoes.postagens.push(post);
+        });
+    })
+    usuarioModel.buscarComentarios(idUsuario).then((data) => {
+        data.forEach(comments => {
+            interacoes.comentarios.push(comments);
+        })
+        res.status(203).json(interacoes);
+    })
+}
+
 module.exports = {
     login,
     cadastrar,
     idadePublico,
-    perfil
+    perfil,
+    publicacoesUsuario
 }

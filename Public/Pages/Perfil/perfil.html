@@ -30,7 +30,7 @@
     <div class="container">
         <div class="box-usuario">
             <div class="info-usuario" id="div_informacoesUsuario">
-                
+                <!-- caixa com as informacoes do usuário -->
             </div>
             <div class="info-publicacoes">
                 <div class="box-extras">
@@ -57,51 +57,13 @@
                 </div>
             </div>
             <div class="box-conteudos" id="div_postagens">
-                <div class="conteudos">
-                    <div class="info-conteudo">
-                        <h3>Cenas épicas em Invecível</h3>
-                        <div>
-                            <ul>
-                                <li>Curtidas: 12</li>
-                                <li>|</li>
-                                <li>Postagem: 12/01/2024</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="info-conteudo">
-                        <h3>Teorias sobre Invencível: Próximos Episódios', 'Quais são as suas teorias para os próximos episódios de Invencível? Compartilhe suas especulações e expectativas.</h3>
-                        <div>
-                            <ul>
-                                <li>Curtidas: 12</li>
-                                <li>|</li>
-                                <li>Postagem: 12/01/2024</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="conteudos" id="div_conteudoPosts">
+                    <!-- postagens do usuario -->
                 </div>
             </div>
             <div class="box-conteudos" id="div_comentarios">
-                <div class="conteudos">
-                    <div class="info-conteudo">
-                        <h3>Cenas épicas em Invecível</h3>
-                        <div>
-                            <ul>
-                                <li>Curtidas: 12</li>
-                                <li>|</li>
-                                <li>Postagem: 12/01/2024</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="info-conteudo">
-                        <h3>Teorias sobre Invencível: Próximos Episódios', 'Quais são as suas teorias para os próximos episódios de Invencível? Compartilhe suas especulações e expectativas.</h3>
-                        <div>
-                            <ul>
-                                <li>Curtidas: 12</li>
-                                <li>|</li>
-                                <li>Postagem: 12/01/2024</li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="conteudos" id="div_conteudoComments">
+                    <!-- comentarios do usuario -->
                 </div>
             </div>
         </div>
@@ -120,6 +82,7 @@
 
         infoUsuario();
         ajustarNavBar();
+        interacoesUsuario();
     }
 
     btn_postagens.onclick = () => {
@@ -223,5 +186,73 @@
                 <li><a href="../Cadastro/cadastro.html">Cadastro</a></li>
             `;
         }
+    }
+
+    const interacoesUsuario = () => {
+
+        let idPerfil = 0;
+        if(sessionStorage.ID_VISITANTE == sessionStorage.ID_USUARIO || sessionStorage.ID_VISITANTE == undefined){
+            idPerfil = sessionStorage.ID_USUARIO;
+        } else{
+            idPerfil = sessionStorage.ID_VISITANTE;
+        }
+
+        fetch(`/usuarios/publicacoes/${idPerfil}`, {
+            method: 'GET',
+            mode: 'cors'
+        }).then((res) => {
+            if(res.ok){
+                res.json().then((data) => {
+
+                    data.postagens.map((item) => {
+
+                        let dt = new Date(item.dtPostagem);
+                        let mes = dt.getMonth() + 1;
+                        mes = mes < 10 ? '0' + mes : mes;
+
+                        let minuto = dt.getMinutes();
+                        minuto = minuto < 10 ? '0' + minuto : minuto;
+
+                        div_conteudoPosts.innerHTML += `
+                            <div class="info-conteudo">
+                                <h3>${item.titulo}</h3>
+                                <div>
+                                    <ul>
+                                        <li>Curtidas: ${item.curtidas}</li>
+                                        <li>|</li>
+                                        <li>Postagem: ${dt.getDate()}/${mes}/${dt.getFullYear()} às ${dt.getHours()}:${minuto}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `;
+                    })
+                    data.comentarios.map((item) => {
+                        let dt = new Date(item.dtPostagem);
+                        let mes = dt.getMonth() + 1;
+                        mes = mes < 10 ? '0' + mes : mes;
+
+                        let minuto = dt.getMinutes();
+                        minuto = minuto < 10 ? '0' + minuto : minuto;
+
+                        div_conteudoComments.innerHTML += `
+                            <div class="info-conteudo">
+                                <h3>${item.comentario}</h3>
+                                <div>
+                                    <ul>
+                                        <li>Curtidas: ${item.curtidas}</li>
+                                        <li>|</li>
+                                        <li>Postagem: ${dt.getDate()}/${mes}/${dt.getFullYear()} às ${dt.getHours()}:${minuto}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        `;
+                    })
+                })
+            } else{
+                res.text().then((err) => {
+                    console.error(err)
+                })
+            }
+        })
     }
 </script>
