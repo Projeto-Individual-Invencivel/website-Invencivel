@@ -19,29 +19,18 @@
             </a>
         </div>
         <div class="box-links">
-            <ul>
+            <ul id="ul_linksNav">
                 <li><a href="#" style="text-decoration: underline;">Perfil</a></li>
                 <li>|</li>
-                <li><a href="../Forum/forum.html">Fórum</a></li>
+                <li><a href="../Forum/forum.html" onclick="sessionStorage.removeItem('ID_VISITANTE')">Fórum</a></li>
                 <li>|</li>
-                <li><a href="../Quizzes/quizzes.html">Quiz</a></li>
-                <li>|</li>
-                <li><a href="../../index.html">Sair</a></li>
             </ul>
         </div>
     </div>
     <div class="container">
         <div class="box-usuario">
             <div class="info-usuario" id="div_informacoesUsuario">
-                <h2>Suas Informações:</h2>
-                <input type="text" placeholder="Nome de usuário" id="inp_nomeUsuario" value="BrunoGomes">
-                <input type="text" placeholder="Email do usuário" id="inp_emailUsuario" value="brunogomes2023@gmail.com">
-                <input type="date" value="2001-01-01" id="inp_nascUsuario">
-                <span class="span-inscricao" id="span_dtInscricao"></span>
-                <div class="box-eventos">
-                    <button class="btn-salvar">Salvar</button>
-                    <button class="btn-descartar" onclick="infoUsuario()">Descartar</button>
-                </div>
+                
             </div>
             <div class="info-publicacoes">
                 <div class="box-extras">
@@ -130,6 +119,7 @@
         btn_postagens.classList.toggle('selecionado');
 
         infoUsuario();
+        ajustarNavBar();
     }
 
     btn_postagens.onclick = () => {
@@ -155,28 +145,50 @@
         div_comentarios.style.display = 'flex';
     }
 
-    const infoUsuario = (idUsuario) => {
+    const infoUsuario = () => {
 
-        fetch(`/usuarios/perfil/${idUsuario}`, {
+        let idPerfil = 0;
+        if(sessionStorage.ID_VISITANTE == sessionStorage.ID_USUARIO || sessionStorage.ID_VISITANTE == undefined){
+            idPerfil = sessionStorage.ID_USUARIO;
+        } else{
+            idPerfil = sessionStorage.ID_VISITANTE;
+        }
+
+        fetch(`/usuarios/perfil/${idPerfil}`, {
             method: 'GET',
             mode: 'cors'
         }).then((res) => {
             if(res.ok){
                 res.json().then((data) => {
                     
-                    inp_nomeUsuario.value = data.nome;
-                    inp_emailUsuario.value = data.email;
-                
-                    let dtFormatada = new Date(data.dtNasc);
-                    let mes = dtFormatada.getMonth() + 1;
-                    mes = mes < 10 ? '0' + mes : mes;
-
-                    inp_nascUsuario.value = `${dtFormatada.getFullYear()}-${mes}-${dtFormatada.getDate()}`;
-                
                     div_numCurtidas.innerHTML = `${data.likesPosts + data.likesComments}`;
                     div_numPostagens.innerHTML = data.posts;
                     div_numComentarios.innerHTML = data.coments;
-                    span_dtInscricao.innerHTML = dataInscricao(new Date(data.dtContaCriada));
+
+                    if(sessionStorage.ID_USUARIO == sessionStorage.ID_VISITANTE || sessionStorage.ID_VISITANTE == undefined){
+
+                        let dtFormatada = new Date(data.dtNasc);
+                        let mes = dtFormatada.getMonth() + 1;
+                        mes = mes < 10 ? '0' + mes : mes;
+
+                        div_informacoesUsuario.innerHTML = `
+                            <h2>Suas Informações:</h2>
+                            <input type="text" placeholder="Nome de usuário" value="${data.nome}">
+                            <input type="text" placeholder="Email do usuário" value="${data.email}">
+                            <input type="date" value="${dtFormatada.getFullYear()}-${mes}-${dtFormatada.getDate()}">
+                            <span class="span-inscricao">${dataInscricao(new Date(data.dtContaCriada))}</span>
+                            <div class="box-eventos">
+                                <button class="btn-salvar">Salvar</button>
+                                <button class="btn-descartar" onclick="infoUsuario()">Descartar</button>
+                            </div>
+                        `;
+                    } else{
+                        div_informacoesUsuario.innerHTML = `
+                            <h1 style="font-size: 3em">${data.nome}</h1>
+                            <span>${data.email}</span>
+                            <span class="span-inscricao" style="width: 35%; margin-top: 2%;">${dataInscricao(new Date(data.dtContaCriada))}</span>
+                        `;
+                    }
                 })
             } else{
                 res.text().then((err) => {
@@ -194,5 +206,22 @@
 
         const msg = `Na plataforma desde ${meses[dt.getMonth()]} de ${dt.getFullYear()}`;
         return msg;
+    }
+
+    const ajustarNavBar = () => {
+
+        if(sessionStorage.ID_USUARIO != undefined){
+            ul_linksNav.innerHTML += `
+                <li><a href="../Quizzes/quizzes.html" onclick="sessionStorage.removeItem('ID_VISITANTE')">Quiz</a></li>
+                <li>|</li>
+                <li><a href="../../index.html" onclick="sessionStorage.clear()">Sair</a></li>
+            `;  
+        } else{
+            ul_linksNav.innerHTML += `
+                <li><a href="../Login/login.html">Login</a></li>
+                <li>|</li>
+                <li><a href="../Cadastro/cadastro.html">Cadastro</a></li>
+            `;
+        }
     }
 </script>
