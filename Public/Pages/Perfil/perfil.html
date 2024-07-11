@@ -34,32 +34,30 @@
             </div>
             <div class="info-publicacoes">
                 <div class="box-extras">
-                    <div class="circle" style="background-color: #78F51D;" id="div_numCurtidas"></div>
+                    <div class="square" id="div_numCurtidas"></div>
                     <strong>Curtidas recebidas</strong>
                 </div>
                 <div class="box-extras">
-                    <div class="circle" style="background-color: #2AF56F;" id="div_numPostagens"></div>
+                    <div class="square" id="div_numPostagens"></div>
                     <strong>Postagens publicadas</strong>
                 </div>
                 <div class="box-extras">
-                    <div class="circle" style="background-color: #5DF55D;" id="div_numComentarios"></div>
+                    <div class="square" id="div_numComentarios"></div>
                     <strong>Comentários publicados</strong>
                 </div>
             </div>
         </div>
         <div class="box-interacoes">
-            <div class="box-tipos-conteudos">
-                <div class="box-titulo-pub" id="btn_postagens">
-                    <strong>Postagens</strong>
-                </div>
-                <div class="box-titulo-com" id="btn_comentarios">
-                    <strong>Comentários</strong>
-                </div>
+            <div class="box-titulo-pub" id="btn_postagens">
+                <strong>Postagens:</strong>
             </div>
             <div class="box-conteudos" id="div_postagens">
                 <div class="conteudos" id="div_conteudoPosts">
                     <!-- postagens do usuario -->
                 </div>
+            </div>
+            <div class="box-titulo-com" id="btn_comentarios">
+                <strong>Comentários:</strong>
             </div>
             <div class="box-conteudos" id="div_comentarios">
                 <div class="conteudos" id="div_conteudoComments">
@@ -76,36 +74,9 @@
 <script>
     window.onload = () => {
 
-        div_comentarios.style.display = 'none';
-        btn_comentarios.classList.toggle('padrao');
-        btn_postagens.classList.toggle('selecionado');
-
         infoUsuario();
         ajustarNavBar();
         interacoesUsuario();
-    }
-
-    btn_postagens.onclick = () => {
-
-        btn_comentarios.classList.remove('selecionado');
-        btn_comentarios.classList.add('padrao');
-
-        btn_postagens.classList.add('selecionado');
-        btn_postagens.classList.remove('padrao');
-
-        div_postagens.style.display = 'flex';
-        div_comentarios.style.display = 'none';
-    }
-    btn_comentarios.onclick = () => {
-        
-        btn_comentarios.classList.add('selecionado');
-        btn_comentarios.classList.remove('padrao');
-
-        btn_postagens.classList.remove('selecionado');
-        btn_postagens.classList.add('padrao');
-
-        div_postagens.style.display = 'none';
-        div_comentarios.style.display = 'flex';
     }
 
     const infoUsuario = () => {
