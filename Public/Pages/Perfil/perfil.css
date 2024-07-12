@@ -168,13 +168,13 @@
 }
 
 .box-extras{
-    height: 60%;
+    height: 65%;
     width: 25%;
 
     display: flex;
     align-items: center;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .box-extras strong{
@@ -183,8 +183,8 @@
 }
 
 .square{
-    height: 100px;
-    width: 90px;
+    height: 65%;
+    width: 65%;
     background-color: #1062DD;
 
     display: flex;
@@ -195,6 +195,9 @@
     border-radius: 8px;
     font-size: 3em;
     font-weight: bold;
+    border: 4px solid black;
+
+    box-shadow: 2px 2px 14px 2px #1062DD;
 }
 
 .box-interacoes{

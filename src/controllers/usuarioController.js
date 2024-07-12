@@ -90,10 +90,52 @@ async function publicacoesUsuario(req, res){
     })
 }
 
+function editarPerfil(req, res){
+
+    const idUsuario = req.params.idUsuario;
+    const nome = req.body.nome;
+    const email = req.body.email;
+    const nascimento = new Date(req.body.nascimento);
+    const senha = req.body.senha;
+
+    usuarioModel.buscarUsuarioId(idUsuario).then(async (usuario) => {
+        
+        const emailUsado = await usuarioModel.buscarEmail(email).then((emailUsuario) => {
+            return emailUsuario[0];
+        })
+
+        let idUsuarioEmail = emailUsado != null ? emailUsado.id_usuario : true;
+
+        if(usuario[0].senha != senha){
+            res.status(404).send("Senha incorreta");
+        } else if(idUsuario <= 0 || usuario.length == 0){
+            res.status(404).send('Este usuário não existe ou não foi encontrado')
+        } else if(nome == "" || email == "" || nascimento == ""){
+            res.status(404).send("Preencha todos os campos para continuar")
+        } else if(emailUsado != undefined && idUsuarioEmail != idUsuario){
+            res.status(404).send("Este email já está em uso");
+        } else if(email.indexOf("@") == -1 || email.indexOf(".") == -1){
+            res.status(400).send("Este email é inválido");
+        } else if((new Date().getFullYear() - nascimento.getFullYear()) < 13){
+            res.status(404).send("Data de nascimento inválida")
+        } else{
+            
+            let mes = nascimento.getMonth() + 1;
+            mes = mes < 10 ? '0' + mes : mes;
+
+            const nascFormatado = `${nascimento.getFullYear()}-${mes}-${nascimento.getDate()}`;
+            usuarioModel.atualizarPerfil(idUsuario, nome, email, nascFormatado).then((perfilAtualizado) => {
+                res.status(203).json(perfilAtualizado);
+            })
+        }
+    })    
+}
+
 module.exports = {
     login,
     cadastrar,
     idadePublico,
     perfil,
-    publicacoesUsuario
+    publicacoesUsuario,
+    editarPerfil
 }

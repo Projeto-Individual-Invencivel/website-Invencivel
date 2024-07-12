@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="perfil.css">
     <script src="../../Js/sessionStorage.js"></script>
     <link rel="shortcut icon" href="../../Assets/Icons/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 </head>
 <body>
     <div class="navBar">
@@ -49,7 +50,7 @@
         </div>
         <div class="box-interacoes">
             <div class="box-titulo-pub" id="btn_postagens">
-                <strong>Postagens:</strong>
+                <strong><img src="../../Assets/Images/img-postagens.png" alt="icone de postagem" height="25em"> Postagens:</strong>
             </div>
             <div class="box-conteudos" id="div_postagens">
                 <div class="conteudos" id="div_conteudoPosts">
@@ -57,7 +58,7 @@
                 </div>
             </div>
             <div class="box-titulo-com" id="btn_comentarios">
-                <strong>Comentários:</strong>
+                <strong><img src="../../Assets/Images/img-comentario.png" alt="imagem de um balao de comentario" height="25em"> Comentários:</strong>
             </div>
             <div class="box-conteudos" id="div_comentarios">
                 <div class="conteudos" id="div_conteudoComments">
@@ -107,12 +108,12 @@
 
                         div_informacoesUsuario.innerHTML = `
                             <h2>Suas Informações:</h2>
-                            <input type="text" placeholder="Nome de usuário" value="${data.nome}">
-                            <input type="text" placeholder="Email do usuário" value="${data.email}">
-                            <input type="date" value="${dtFormatada.getFullYear()}-${mes}-${dtFormatada.getDate()}">
+                            <input type="text" placeholder="Nome de usuário" id="inp_nome" value="${data.nome}">
+                            <input type="text" placeholder="Email do usuário" id="inp_email" value="${data.email}">
+                            <input type="date" id="inp_nascimento" value="${dtFormatada.getFullYear()}-${mes}-${dtFormatada.getDate()}">
                             <span class="span-inscricao">${dataInscricao(new Date(data.dtContaCriada))}</span>
                             <div class="box-eventos">
-                                <button class="btn-salvar">Salvar</button>
+                                <button class="btn-salvar" onclick="atualizarPerfil()">Salvar</button>
                                 <button class="btn-descartar" onclick="infoUsuario()">Descartar</button>
                             </div>
                         `;
@@ -225,5 +226,60 @@
                 })
             }
         })
+    }
+
+    const atualizarPerfil = () => {
+
+        Swal.fire({
+            title: 'Informe a senha para continuar',
+            text: 'A alteração não poderá ser desfeita!',
+            icon: 'warning',
+            input: 'password',
+            inputAttributes: {
+                autocapitalize: "off"
+            },
+            confirmButtonText: 'Alterar dados',
+            showLoaderOnConfirm: true, 
+            preConfirm: async (senha) => {
+
+                console.log(senha);
+
+                await fetch(`/usuarios/editar-perfil/${sessionStorage.ID_USUARIO}`, {
+                    method: 'PUT',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nome: document.getElementById('inp_nome').value,
+                        email: document.getElementById('inp_email').value,
+                        senha,
+                        nascimento: new Date(document.getElementById('inp_nascimento').value)
+                    })
+                }).then((res) => {
+                    if(res.ok){
+                        Swal.fire({
+                            title: 'Alterações confirmadas!',
+                            icon: 'success'
+                        })
+
+                        sessionStorage.NOME = document.getElementById('inp_nome').value;
+
+                        setTimeout(() => {
+                            infoUsuario();
+                        }, 2000);
+                    } else{
+                        res.text().then((err) => {
+                            Swal.fire({
+                                title: 'Ops! Algo deu errado!',
+                                text: err,
+                                icon: 'error'
+                            })
+                            infoUsuario();
+                        })
+                    }
+                })
+            }
+        });
     }
 </script>

@@ -16,7 +16,7 @@ function cadastrar(nome, nasc, email, senha){
 
 async function buscarEmail(email){
 
-    var script = `SELECT * FROM tb_usuario WHERE email = '${email}'`
+    var script = `SELECT * FROM tb_usuario WHERE email = '${email}'`;
     return database.executar(script)
 }
 
@@ -79,6 +79,12 @@ function buscarComentarios(idUsuario){
     return database.executar(script);
 }
 
+function atualizarPerfil(idUsuario, nome, email, nascimento){
+
+    var script = `update tb_usuario set email = '${email}', dtNasc = '${nascimento}', nome = '${nome}' where id_usuario = ${idUsuario}`;
+    return database.executar(script);
+}
+
 module.exports = {
     login,
     cadastrar,
@@ -87,5 +93,6 @@ module.exports = {
     buscarIdadePublic,
     buscarInteracoesUsuario,
     buscarPostagens,
-    buscarComentarios
+    buscarComentarios,
+    atualizarPerfil
 };

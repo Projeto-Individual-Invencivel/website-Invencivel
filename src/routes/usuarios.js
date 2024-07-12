@@ -24,4 +24,8 @@ router.get('/publicacoes/:idUsuario', (req, res) => {
     usuarioController.publicacoesUsuario(req, res);
 })
 
+router.put('/editar-perfil/:idUsuario', (req, res) => {
+    usuarioController.editarPerfil(req, res);
+})
+
 module.exports = router;
