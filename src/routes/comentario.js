@@ -15,4 +15,8 @@ router.delete('/descurtir/:idUsuario/:idComentario', (req, res) => {
     comentarioController.descurtirComentario(req, res);
 })
 
+router.delete('/apagar/:idUsuario/:idComentario', (req, res) => {
+    comentarioController.deletarComentario(req, res);
+})
+
 module.exports = router;

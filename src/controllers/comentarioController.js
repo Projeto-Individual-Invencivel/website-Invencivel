@@ -77,8 +77,43 @@ const descurtirComentario = async (req, res) => {
     }
 }
 
+const deletarComentario = async (req, res) => {
+
+    const idUsuario = req.params.idUsuario;
+    const idComentario = req.params.idComentario;
+    
+    const usuarioValido = await usuarioModels.buscarUsuarioId(idUsuario).then((data) => {
+        return data.length > 0 ? true : false;
+    }) 
+
+    const comentarioValido = await comentarioModels.buscarComentarioId(idComentario);
+    if(idComentario <= 0 || idUsuario <= 0){
+        res.status(400).send('Valores inválidos');
+    } else if(!usuarioValido){
+        res.status(400).send('Este usuário não foi encontrado');
+    } else if(comentarioValido[0].fkAutorComentario != idUsuario){
+        res.status(400).send('Você não tem permissão para excluir este comentário');
+    } else {
+
+        await comentarioModels.buscarRespostasComentario(idComentario).then((respostas) => {
+            if(respostas.length > 0){
+                respostas.map(async (item) => {
+                    await comentarioModels.apagarCurtidasComentario(item.id_comentario);
+                    await comentarioModels.deletarComentario(item.id_comentario);
+                })
+            }
+        });
+
+        await comentarioModels.apagarCurtidasComentario(idComentario);
+        await comentarioModels.deletarComentario(idComentario).then(() => {
+            res.status(200).send("Comentário apagado com sucesso!");
+        });
+    }
+}
+
 module.exports = {
     responderComentario,
     curtirComentario,
-    descurtirComentario
+    descurtirComentario,
+    deletarComentario
 }

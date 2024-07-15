@@ -41,10 +41,38 @@ const descurtirComentario = (idComentario, idAutorCurtida) => {
     return database.executar(script);
 }
 
+const buscarComentarioId = (idComentario) => {
+
+    const script = `select * from tb_comentario where id_comentario = ${idComentario}`;
+    return database.executar(script);
+}
+
+const buscarRespostasComentario = (idComentario) => {
+
+    const script = `select * from tb_comentario where fkRespostaComentario = ${idComentario}`;
+    return database.executar(script);
+}
+
+const apagarCurtidasComentario = (idComentario) => {
+
+    const script = `delete from tb_curtida_comentario where fkComentario = ${idComentario}`;
+    return database.executar(script);
+}
+
+const deletarComentario = (idComentario) => {
+
+    const script = `delete from tb_comentario where id_comentario = ${idComentario}`;
+    return database.executar(script);
+}
+
 module.exports = {
     comentariosPost,
     responderComentario,
     buscarCurtidaComentarioId,
     curtirComentario,
-    descurtirComentario
+    descurtirComentario,
+    buscarComentarioId,
+    buscarRespostasComentario,
+    apagarCurtidasComentario,
+    deletarComentario
 }

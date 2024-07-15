@@ -73,7 +73,7 @@
                             <span>Postagem: 03/05/2024</span>
                         </div>
                         <div class="box-comentario-usuario">
-                            <span></span>
+                            <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed minima voluptates, reprehenderit cupiditate quaerat nihil architecto natus ipsum ea blanditiis et, similique, ratione temporibus. Facilis pariatur aperiam dolor tempore fuga.</span>
                         </div>
                         <div class="box-responder-comentario">
                             <textarea id="" placeholder="Escreva sua resposta aqui"></textarea>
@@ -91,11 +91,17 @@
                             </div>
                             <div class="box-dados-comentario">
                                 <div class="box-autor-comentario">
-                                    <span>nome_autor</span>
-                                    <span>Postagem: 03/05/2024</span>
+                                    <div class="box-informacoes">
+                                        <span>nome_autor</span>
+                                        <span>Postagem: 03/05/2024</span>
+                                    </div>
+                                    <div class="box-editar-apagar">
+                                        <img src="../../Assets/Images/img-excluir-150.png" alt="imagem lixeira" height="25em">
+                                        <a href="#"><img src="../../Assets/Images/img-editar-128.png" alt="imagem lapis" height="25em"></a>
+                                    </div>
                                 </div>
                                 <div class="box-comentario-usuario">
-                                    <span></span>
+                                    <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente, fuga. Voluptatibus iste optio molestiae, doloremque quibusdam expedita aliquam praesentium nam repellat nobis nesciunt recusandae dolores repudiandae quis amet quo necessitatibus! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, eius reprehenderit quidem obcaecati consectetur voluptas? Expedita unde inventore, sed ut quis ad officia maiores voluptate repudiandae facere rerum, necessitatibus placeat?</span>
                                 </div>
                                 <div class="box-responder-comentario">
                                     <textarea id="" placeholder="Escreva sua resposta aqui"></textarea>
@@ -358,6 +364,8 @@
             const btnCurtirComentario = `btn_curtir_comentario${idComentarioPrincipal}`;
             const btnDescurtirComentario = `btn_descurtir_comentario${idComentarioPrincipal}`;
 
+            const exibirFuncionalidades = sessionStorage.ID_USUARIO == dadosComentario.fkAutorComentario ? "display: flex;" : "display: none;";
+
             div_comentarios.innerHTML += `
                 <div class="estrutura-comentario">
                     <div class="box-comentario">
@@ -368,8 +376,14 @@
                         </div>
                         <div class="box-dados-comentario">
                             <div class="box-autor-comentario">
-                                <span onclick="visitarPerfil(${dadosComentario.fkAutorComentario})">${dadosComentario.autor}</span>
-                                <span>Postagem: ${formData}</span>
+                                <div class="box-informacoes">
+                                    <span onclick="visitarPerfil(${dadosComentario.fkAutorComentario})">${dadosComentario.autor}</span>
+                                    <span>Postagem: ${formData}</span>
+                                </div>
+                                <div class="box-editar-apagar" style="${exibirFuncionalidades}">
+                                    <img src="../../Assets/Images/img-excluir-150.png" onclick="excluirComentario(${idComentarioPrincipal})" alt="imagem lixeira" height="25em">
+                                    <a href="#"><img src="../../Assets/Images/img-editar-128.png" alt="imagem lapis" height="25em"></a>
+                                </div>
                             </div>
                             <div class="box-comentario-usuario">
                                 <span>${dadosComentario.comentario}</span>
@@ -401,6 +415,8 @@
                 const btnCurtirComentario = `btn_curtir_comentario${idComentario}`;
                 const btnDescurtirComentario = `btn_descurtir_comentario${idComentario}`;
 
+                const exibirAcoes = sessionStorage.ID_USUARIO == dadosComentario.fkAutorComentario ? "display: flex;" : "display: none;";
+
                 document.getElementById(`respostaComentario${i}`).innerHTML += `
                     <div class="estrutura-comentario">
                         <div class="box-comentario">
@@ -411,8 +427,14 @@
                             </div>
                             <div class="box-dados-comentario">
                                 <div class="box-autor-comentario">
-                                    <span onclick="visitarPerfil(${dadosResposta.fkAutorComentario})">${dadosResposta.autor}</span>
-                                    <span>Postagem: ${formData}</span>
+                                    <div class="box-informacoes">
+                                        <span onclick="visitarPerfil(${dadosResposta.fkAutorComentario})">${dadosResposta.autor}</span>
+                                        <span>Postagem: ${formData}</span>
+                                    </div>
+                                    <div class="box-editar-apagar" style="${exibirAcoes}">
+                                        <img src="../../Assets/Images/img-excluir-150.png" onclick="excluirComentario(${idComentario})" alt="imagem lixeira" height="25em">
+                                        <a href="#"><img src="../../Assets/Images/img-editar-128.png" alt="imagem lapis" height="25em"></a>
+                                    </div>
                                 </div>
                                 <div class="box-comentario-usuario">
                                     <span>${dadosResposta.comentario}</span>
@@ -604,5 +626,45 @@
 
         sessionStorage.ID_VISITANTE = idUsuario;
         window.location.href = '../Perfil/perfil.html';
+    }
+
+    function excluirComentario(idComentario){
+
+        Swal.fire({
+            title: 'Excluir comentário?',
+            text: 'A alteração não poderá ser desfeita!',
+            icon: 'warning',
+            confirmButtonText: 'Apagar comentário',
+            showCancelButton: true,
+            cancelButtonColor: "#d33",
+            cancelButtonText: 'Cancelar',
+            showLoaderOnConfirm: true, 
+            preConfirm: async () => {
+                fetch(`/comentario/apagar/${sessionStorage.ID_USUARIO}/${idComentario}`, {
+                    mode: 'cors',
+                    method: 'DELETE'
+                }).then((res) => {
+                    if(res.ok){
+                        res.text().then((data) => {
+                            Swal.fire({
+                                title: data,
+                                icon: 'success'
+                            })
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000)
+                        })
+                    } else{
+                        res.text().then((err) => {
+                            Swal.fire({
+                                title: 'Ops! Algo deu errado!',
+                                text: err,
+                                icon: 'error'
+                            })
+                        })
+                    }
+                })
+            }
+        });
     }
 </script>
