@@ -19,4 +19,8 @@ router.delete('/apagar/:idUsuario/:idComentario', (req, res) => {
     comentarioController.deletarComentario(req, res);
 })
 
+router.put('/editar/:idUsuario/:idComentario', (req, res) => {
+    comentarioController.editarComentario(req, res);
+})
+
 module.exports = router;

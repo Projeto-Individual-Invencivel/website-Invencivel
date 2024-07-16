@@ -97,15 +97,20 @@
                                     </div>
                                     <div class="box-editar-apagar">
                                         <img src="../../Assets/Images/img-excluir-150.png" alt="imagem lixeira" height="25em">
-                                        <a href="#"><img src="../../Assets/Images/img-editar-128.png" alt="imagem lapis" height="25em"></a>
+                                        <img src="../../Assets/Images/img-editar-128.png" onclick="exibirEditarComentario(1)" alt="imagem lapis" height="25em">
                                     </div>
                                 </div>
                                 <div class="box-comentario-usuario">
-                                    <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente, fuga. Voluptatibus iste optio molestiae, doloremque quibusdam expedita aliquam praesentium nam repellat nobis nesciunt recusandae dolores repudiandae quis amet quo necessitatibus! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, eius reprehenderit quidem obcaecati consectetur voluptas? Expedita unde inventore, sed ut quis ad officia maiores voluptate repudiandae facere rerum, necessitatibus placeat?</span>
+                                    <span id="span_comentarioUsuario">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente, fuga. Voluptatibus iste optio molestiae, doloremque quibusdam expedita aliquam praesentium nam repellat nobis nesciunt recusandae dolores repudiandae quis amet quo necessitatibus! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, eius reprehenderit quidem obcaecati consectetur voluptas? Expedita unde inventore, sed ut quis ad officia maiores voluptate repudiandae facere rerum, necessitatibus placeat?</span>
+                                    <textarea id="txt_editarComentario" style="display: none;">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sapiente, fuga. Voluptatibus iste optio molestiae, doloremque quibusdam expedita aliquam praesentium nam repellat nobis nesciunt recusandae dolores repudiandae quis amet quo necessitatibus! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, eius</textarea>
                                 </div>
-                                <div class="box-responder-comentario">
+                                <div class="box-responder-comentario" id="div_formResponder">
                                     <textarea id="" placeholder="Escreva sua resposta aqui"></textarea>
                                     <button class="btn-responder-comentario">Responder</button>
+                                </div>
+                                <div class="box-editar-comentario" id="div_formEditar" style="display: none;">
+                                    <button class="btn-salvar" onclick="salvarAlteracoesComentario(comentario, idComentario)">Salvar</button>
+                                    <button class="btn-descartar" onclick="cancelarEditarComentario()">Cancelar</button>
                                 </div>
                             </div>
                         </div>
@@ -360,9 +365,13 @@
 
             const dadosComentario = comentariosPrincipais[i];
             const idComentarioPrincipal = dadosComentario.id_comentario;
-            const spanComentario = `span_comentario${idComentarioPrincipal}`;
+            const spanLikesComentario = `span_likescomentario${idComentarioPrincipal}`;
             const btnCurtirComentario = `btn_curtir_comentario${idComentarioPrincipal}`;
             const btnDescurtirComentario = `btn_descurtir_comentario${idComentarioPrincipal}`;
+            const spanComentario = `span_comentarioUsuario${idComentarioPrincipal}`;
+            const txtComentario = `txt_editarComentario${idComentarioPrincipal}`;
+            const divResponder = `div_formResponder${idComentarioPrincipal}`;
+            const divEditar = `div_formEditar${idComentarioPrincipal}`;
 
             const exibirFuncionalidades = sessionStorage.ID_USUARIO == dadosComentario.fkAutorComentario ? "display: flex;" : "display: none;";
 
@@ -370,9 +379,9 @@
                 <div class="estrutura-comentario">
                     <div class="box-comentario">
                         <div class="box-likes-comentario">
-                            <button onclick="curtirComentario(${idComentarioPrincipal}, ${spanComentario}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnCurtirComentario}"><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
-                            <span id="${spanComentario}">${dadosComentario.curtidas}</span>
-                            <button onclick="descurtirComentario(${idComentarioPrincipal}, ${spanComentario}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnDescurtirComentario}"><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
+                            <button onclick="curtirComentario(${idComentarioPrincipal}, ${spanLikesComentario}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnCurtirComentario}"><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
+                            <span id="${spanLikesComentario}">${dadosComentario.curtidas}</span>
+                            <button onclick="descurtirComentario(${idComentarioPrincipal}, ${spanLikesComentario}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnDescurtirComentario}"><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
                         </div>
                         <div class="box-dados-comentario">
                             <div class="box-autor-comentario">
@@ -382,15 +391,20 @@
                                 </div>
                                 <div class="box-editar-apagar" style="${exibirFuncionalidades}">
                                     <img src="../../Assets/Images/img-excluir-150.png" onclick="excluirComentario(${idComentarioPrincipal})" alt="imagem lixeira" height="25em">
-                                    <a href="#"><img src="../../Assets/Images/img-editar-128.png" alt="imagem lapis" height="25em"></a>
+                                    <a href="#"><img src="../../Assets/Images/img-editar-128.png" onclick="exibirEditarComentario(${spanComentario}, ${txtComentario}, ${divResponder}, ${divEditar})" alt="imagem lapis" height="25em"></a>
                                 </div>
                             </div>
                             <div class="box-comentario-usuario">
-                                <span>${dadosComentario.comentario}</span>
+                                <span id="${spanComentario}">${dadosComentario.comentario}</span>
+                                <textarea id="${txtComentario}" style="display: none;">${dadosComentario.comentario}</textarea>
                             </div>
-                            <div class="box-responder-comentario" style="${exibirBtnResponder}">
+                            <div class="box-responder-comentario" id="${divResponder}" style="${exibirBtnResponder}">
                                 <textarea id="txt_resposta_comentario_principal${idComentarioPrincipal}" placeholder="Escreva sua resposta aqui"></textarea>
                                 <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario_principal${idComentarioPrincipal}, ${idComentarioPrincipal}, '${dadosComentario.autor}')">Responder</button>
+                            </div>
+                            <div class="box-editar-comentario" id="${divEditar}" style="display: none;">
+                                <button class="btn-salvar" onclick="salvarAlteracoesComentario(${txtComentario}, ${idComentarioPrincipal})">Salvar</button>
+                                <button class="btn-descartar" onclick="cancelarEditarComentario(${spanComentario}, ${txtComentario}, ${divResponder}, ${divEditar})">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -411,19 +425,23 @@
                 let formData = `${dia}/${newData.getMonth() + 1}/${newData.getFullYear()} às ${newData.getHours()}:${minuto}`;
 
                 const idComentario = dadosResposta.id_comentario;
-                const spanRespostaComent = `span_comentario${idComentario}`;    
+                const spanLikesRespostaComent = `span_likescomentario${idComentario}`;    
                 const btnCurtirComentario = `btn_curtir_comentario${idComentario}`;
                 const btnDescurtirComentario = `btn_descurtir_comentario${idComentario}`;
+                const spanComentarioResposta = `span_respostacomentario${idComentario}`;
+                const txtComentarioResposta = `txt_editarResComentario${idComentario}`;
+                const divResponderResposta = `div_formResponderComentario${idComentario}`;
+                const divEditarResposta = `div_formEditarResposta${idComentario}`;
 
-                const exibirAcoes = sessionStorage.ID_USUARIO == dadosComentario.fkAutorComentario ? "display: flex;" : "display: none;";
+                const exibirAcoes = sessionStorage.ID_USUARIO == dadosResposta.fkAutorComentario ? "display: flex;" : "display: none;";
 
                 document.getElementById(`respostaComentario${i}`).innerHTML += `
                     <div class="estrutura-comentario">
                         <div class="box-comentario">
                             <div class="box-likes-comentario">
-                                <button onclick="curtirComentario(${idComentario}, ${spanRespostaComent}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnCurtirComentario}"><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
-                                <span id="${spanRespostaComent}">${dadosResposta.curtidas}</span>
-                                <button onclick="descurtirComentario(${idComentario}, ${spanRespostaComent}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnDescurtirComentario}"><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
+                                <button onclick="curtirComentario(${idComentario}, ${spanLikesRespostaComent}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnCurtirComentario}"><img src="../../Assets/Images/arrow-top.png" height="20em" alt="seta para cima"></button>
+                                <span id="${spanLikesRespostaComent}">${dadosResposta.curtidas}</span>
+                                <button onclick="descurtirComentario(${idComentario}, ${spanLikesRespostaComent}, ${btnCurtirComentario}, ${btnDescurtirComentario})" id="${btnDescurtirComentario}"><img src="../../Assets/Images/arrow-bottom.png" height="20em" alt="seta para baixo"></button>
                             </div>
                             <div class="box-dados-comentario">
                                 <div class="box-autor-comentario">
@@ -433,15 +451,20 @@
                                     </div>
                                     <div class="box-editar-apagar" style="${exibirAcoes}">
                                         <img src="../../Assets/Images/img-excluir-150.png" onclick="excluirComentario(${idComentario})" alt="imagem lixeira" height="25em">
-                                        <a href="#"><img src="../../Assets/Images/img-editar-128.png" alt="imagem lapis" height="25em"></a>
+                                        <img src="../../Assets/Images/img-editar-128.png" onclick="exibirEditarComentario(${spanComentarioResposta}, ${txtComentarioResposta}, ${divResponderResposta}, ${divEditarResposta})" alt="imagem lapis" height="25em">
                                     </div>
                                 </div>
                                 <div class="box-comentario-usuario">
-                                    <span>${dadosResposta.comentario}</span>
+                                    <span id="${spanComentarioResposta}">${dadosResposta.comentario}</span>
+                                    <textarea id="${txtComentarioResposta}" style="display: none;">${dadosResposta.comentario}</textarea>
                                 </div>
-                                <div class="box-responder-comentario" style="${exibirBtnResponder}">
+                                <div class="box-responder-comentario" id="${divResponderResposta}" style="${exibirBtnResponder}">
                                     <textarea id="txt_resposta_comentario${idComentario}" placeholder="Escreva sua resposta aqui"></textarea>
-                                    <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario${idComentario}, ${dadosComentario.id_comentario}, '${dadosResposta.autor}')">Responder</button>
+                                    <button class="btn-responder-comentario" onclick="responderComentario(txt_resposta_comentario${idComentario}, ${dadosResposta.id_comentario}, '${dadosResposta.autor}')">Responder</button>
+                                </div>
+                                <div class="box-editar-comentario" id="${divEditarResposta}" style="display: none;">
+                                    <button class="btn-salvar" onclick="salvarAlteracoesComentario(${txtComentarioResposta}, ${idComentario})">Salvar</button>
+                                    <button class="btn-descartar" onclick="cancelarEditarComentario(${spanComentarioResposta}, ${txtComentarioResposta}, ${divResponderResposta}, ${divEditarResposta})">Cancelar</button>
                                 </div>
                             </div>
                         </div>
@@ -666,5 +689,58 @@
                 })
             }
         });
+    }
+
+    function exibirEditarComentario(span, textarea, divFormRes, divFormEdit){
+
+        divFormRes.style.display = 'none';
+        span.style.display = 'none';
+        textarea.style.display = 'flex';
+        divFormEdit.style.display = 'flex';
+    }
+
+    function cancelarEditarComentario(span, textarea, divFormRes, divFormEdit){
+
+        divFormRes.style.display = 'flex';
+        span.style.display = 'flex';
+        textarea.style.display = 'none';
+        divFormEdit.style.display = 'none';  
+    }
+
+    function salvarAlteracoesComentario(alteracoes, idComentario){
+
+        const idUsuario = sessionStorage.ID_USUARIO;
+        const comentario = alteracoes.value;
+
+        fetch(`/comentario/editar/${idUsuario}/${idComentario}`, {
+            method:  'PUT',
+            mode: 'cors',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                comentario
+            })
+        }).then((res) => {
+            if(res.ok){
+                res.json().then((data) => {
+                    Swal.fire({
+                        title: 'Comentário atualizado!',
+                        icon: 'success'
+                    });
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000)
+                })
+            } else{
+                res.text().then((err) => {
+                    Swal.fire({
+                        title: 'Ops! Algo deu errado!',
+                        text: err,
+                        icon: 'error'
+                    })
+                })
+            }
+        })
     }
 </script>

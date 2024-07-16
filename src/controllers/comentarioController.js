@@ -111,9 +111,36 @@ const deletarComentario = async (req, res) => {
     }
 }
 
+const editarComentario = async (req, res) => {
+
+    const idUsuario = req.params.idUsuario;
+    const idComentario = req.params.idComentario;
+    const alteracoes = req.body.comentario;
+
+    const dadosUsuario = await usuarioModels.buscarUsuarioId(idUsuario);
+    const dadosComentario = await comentarioModels.buscarComentarioId(idComentario);
+
+    if(idUsuario <= 0 || idComentario <= 0){
+        res.status(400).send("Valores inválidos");
+    } else if(dadosUsuario.length <= 0){
+        res.status(400).send("Usuário não encontrado");
+    } else if(dadosComentario.length <= 0){
+        res.status(400).send("Comentário não encontrado");
+    } else if(dadosUsuario[0].id_usuario != dadosComentario[0].fkAutorComentario){
+        res.status(400).send("Você não tem permissão para editar este comentário!");
+    } else if(alteracoes.substr(alteracoes.indexOf(" ")).trim() == ""){
+        res.status(400).send("Campo comentário está vazio");
+    } else{
+        comentarioModels.editarComentario(idComentario, alteracoes).then((data) => {
+            res.status(203).json(data);
+        })
+    }
+}
+
 module.exports = {
     responderComentario,
     curtirComentario,
     descurtirComentario,
-    deletarComentario
+    deletarComentario,
+    editarComentario
 }

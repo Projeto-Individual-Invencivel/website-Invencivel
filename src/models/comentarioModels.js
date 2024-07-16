@@ -65,6 +65,12 @@ const deletarComentario = (idComentario) => {
     return database.executar(script);
 }
 
+const editarComentario = (idComentario, comentario) => {
+
+    const script = `update tb_comentario set comentario = '${comentario}' where id_comentario = ${idComentario}`;
+    return database.executar(script);
+} 
+
 module.exports = {
     comentariosPost,
     responderComentario,
@@ -74,5 +80,6 @@ module.exports = {
     buscarComentarioId,
     buscarRespostasComentario,
     apagarCurtidasComentario,
-    deletarComentario
+    deletarComentario,
+    editarComentario
 }
